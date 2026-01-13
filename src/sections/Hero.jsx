@@ -49,8 +49,10 @@ connected experiences.`;
     <section id="home" className="relative flex flex-col justify-end min-h-screen bg-line-dark overflow-hidden">
       
       {/* --- BACKGROUND LAYERS --- */}
+      
+      {/* 1. Iron Man Background Image */}
       <div 
-        className="absolute inset-0 z-0 opacity-40 mix-blend-overlay"
+        className="absolute inset-0 z-0 opacity-100 mix-blend-overlay"
         style={{
           backgroundImage: `url("/assets/ironman.jpg")`,
           backgroundSize: "cover",
@@ -58,9 +60,15 @@ connected experiences.`;
           filter: "grayscale(100%) contrast(1.2)", 
         }}
       />
+      
+      {/* 2. Dark Overlay */}
       <div className="absolute inset-0 z-0 bg-gradient-to-t from-line-dark via-line-dark/80 to-transparent" />
-      <div className="absolute inset-0 z-0 bg-cyber-grid opacity-60 pointer-events-none" />
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-line-green/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
+
+      {/* 3. Cyber Grid */}
+      <div className="absolute inset-0 z-0 bg-cyber-grid opacity-100 pointer-events-none" />
+
+      {/* 4. Decorative Glow Spot (UPDATED TO RED) */}
+      <div className="absolute top-14 right-0 w-[500px] h-[500px] bg-iron-red/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
 
 
       {/* --- CONTENT LAYERS --- */}
@@ -70,13 +78,13 @@ connected experiences.`;
           title={"PENTA XION"} 
           text={text}
           textColor={"text-white"} 
-          accentColor={"text-line-green"}
+          accentColor={"text-iron-red"} 
         />
       </div>
 
-      {/* --- NEW TIMER SECTION (Bottom Left) --- */}
+      {/* --- 2D TIMER SECTION (Bottom Left) --- */}
       <div className="absolute bottom-10 left-6 md:left-12 z-20">
-        <p className="font-mono text-[10px] md:text-xs text-line-green tracking-widest mb-2 animate-pulse">
+        <p className="font-mono text-[10px] md:text-xs text-iron-red tracking-widest mb-2 animate-pulse">
            REGISTRATION_OPENS_IN:
         </p>
         <div className="flex items-end gap-2 md:gap-4 font-mono text-white">
@@ -85,25 +93,25 @@ connected experiences.`;
              <span className="text-3xl md:text-5xl font-bold leading-none">{format(timeLeft.d)}</span>
              <span className="text-[10px] text-gray-500 uppercase mt-1">Days</span>
            </div>
-           <span className="text-2xl md:text-4xl text-line-green/50 pb-2">:</span>
+           <span className="text-2xl md:text-4xl text-iron-red/50 pb-2">:</span>
            
            {/* Hours */}
            <div className="flex flex-col items-center">
              <span className="text-3xl md:text-5xl font-bold leading-none">{format(timeLeft.h)}</span>
              <span className="text-[10px] text-gray-500 uppercase mt-1">Hrs</span>
            </div>
-           <span className="text-2xl md:text-4xl text-line-green/50 pb-2">:</span>
+           <span className="text-2xl md:text-4xl text-iron-red/50 pb-2">:</span>
 
            {/* Minutes */}
            <div className="flex flex-col items-center">
              <span className="text-3xl md:text-5xl font-bold leading-none">{format(timeLeft.m)}</span>
              <span className="text-[10px] text-gray-500 uppercase mt-1">Mins</span>
            </div>
-           <span className="text-2xl md:text-4xl text-line-green/50 pb-2">:</span>
+           <span className="text-2xl md:text-4xl text-iron-red/50 pb-2">:</span>
 
            {/* Seconds */}
            <div className="flex flex-col items-center">
-             <span className="text-3xl md:text-5xl font-bold leading-none text-line-green">{format(timeLeft.s)}</span>
+             <span className="text-3xl md:text-5xl font-bold leading-none text-iron-red">{format(timeLeft.s)}</span>
              <span className="text-[10px] text-gray-500 uppercase mt-1">Secs</span>
            </div>
         </div>
@@ -127,9 +135,10 @@ connected experiences.`;
 
           <Environment resolution={256}>
             <group rotation={[-Math.PI / 3, 0, 1]}>
-              <Lightformer form={"ring"} color="#06C755" intensity={4} position={[0, 5, -9]} scale={10} />
+              {/* UPDATED LIGHTING TO IRON RED (#FF1F1F) */}
+              <Lightformer form={"ring"} color="#FF1F1F" intensity={4} position={[0, 5, -9]} scale={10} />
               <Lightformer form={"rect"} color="#ffffff" intensity={1} position={[0, 3, 1]} scale={5} />
-              <Lightformer form={"circle"} color="#06C755" intensity={2} position={[-5, -1, -1]} scale={10} />
+              <Lightformer form={"circle"} color="#FF1F1F" intensity={2} position={[-5, -1, -1]} scale={10} />
               <Lightformer form={"circle"} color="#111111" intensity={1} position={[10, 1, 0]} scale={16} />
             </group>
           </Environment>

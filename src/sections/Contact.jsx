@@ -51,7 +51,8 @@ const HoloCore = () => {
       <mesh ref={meshRef} scale={2.4}>
         <sphereGeometry args={[1, 64, 64]} />
         <MeshDistortMaterial
-          color="#06C755"
+          // Updated to Iron Red
+          color="#FF1F1F" 
           envMapIntensity={1}
           clearcoat={1}
           metalness={0.8}
@@ -74,7 +75,7 @@ const Contact = () => {
       scrollTrigger: { trigger: "#contact", start: "top 80%" },
     });
 
-    // 2. Grid Animation (Fixed: Uses fromTo to guarantee visibility)
+    // 2. Grid Animation
     gsap.fromTo(".contact-card", 
       { opacity: 0, y: 50, scale: 0.9 },
       {
@@ -86,7 +87,7 @@ const Contact = () => {
         ease: "back.out(1.5)",
         scrollTrigger: {
           trigger: "#contact-grid",
-          start: "top 85%", // Triggers earlier so space isn't empty
+          start: "top 85%",
         },
       }
     );
@@ -107,7 +108,8 @@ const Contact = () => {
 Got a question or a project idea? 
 We'd love to hear from you.`}
           textColor={"text-white"}
-          accentColor={"text-line-green"}
+          // Updated Accent to Red
+          accentColor={"text-iron-red"}
           withScrollTrigger={false}
         />
       </div>
@@ -116,19 +118,20 @@ We'd love to hear from you.`}
         
         {/* --- LEFT: 3D SPHERE --- */}
         <div className="w-full lg:w-1/2 h-[400px] lg:h-auto relative flex items-center justify-center">
-          {/* Decorative Glow Behind Sphere */}
-          <div className="absolute w-[300px] h-[300px] bg-line-green/20 blur-[100px] rounded-full" />
+          {/* Decorative Glow Behind Sphere (Red) */}
+          <div className="absolute w-[300px] h-[300px] bg-iron-red/20 blur-[100px] rounded-full" />
           
           <Canvas camera={{ position: [0, 0, 5] }}>
             <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#06C755" />
+            {/* Point Light Red */}
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#FF1F1F" />
             <Environment preset="city" />
             <HoloCore />
           </Canvas>
         </div>
 
 
-        {/* --- RIGHT: 2x2 GRID (Fills the empty space) --- */}
+        {/* --- RIGHT: 2x2 GRID --- */}
         <div className="w-full lg:w-1/2 px-6 md:px-12 flex flex-col justify-center pb-20 lg:pb-0">
           
           {/* THE GRID */}
@@ -139,7 +142,8 @@ We'd love to hear from you.`}
                 href={item.link}
                 target="_blank"
                 rel="noreferrer"
-                className="contact-card group relative bg-line-gray/80 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden hover:border-line-green transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(6,199,85,0.2)]"
+                // Updated Hover Border and Shadow to Red
+                className="contact-card group relative bg-line-gray/80 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden hover:border-iron-red transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,31,31,0.2)]"
               >
                 {/* Browser Window Header Bar */}
                 <div className="h-8 bg-black/40 border-b border-white/10 flex items-center px-3 gap-2">
@@ -150,7 +154,8 @@ We'd love to hear from you.`}
 
                 {/* Card Content */}
                 <div className="p-6 flex flex-col items-center text-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-line-green/10 flex items-center justify-center text-line-green group-hover:bg-line-green group-hover:text-black transition-colors duration-300">
+                  {/* Updated Icon Colors to Red */}
+                  <div className="w-12 h-12 rounded-full bg-iron-red/10 flex items-center justify-center text-iron-red group-hover:bg-iron-red group-hover:text-black transition-colors duration-300">
                      <Icon icon={item.icon} width="24" />
                   </div>
                   
@@ -171,7 +176,8 @@ We'd love to hear from you.`}
           <div className="mt-12 flex justify-center md:justify-end opacity-60 hover:opacity-100 transition-opacity">
             <div className="flex items-center gap-4 bg-black/30 p-4 border border-white/10 rounded-xl">
                <div className="text-right hidden md:block">
-                 <p className="font-mono text-[10px] text-line-green">SCAN_FOR_ACCESS</p>
+                 {/* Text Red */}
+                 <p className="font-mono text-[10px] text-iron-red">SCAN_FOR_ACCESS</p>
                  <p className="text-xs text-white">ID: #PV_2026</p>
                </div>
                <div className="w-12 h-12 bg-white p-1 rounded-sm">

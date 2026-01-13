@@ -50,14 +50,16 @@ const Navbar = () => {
         y: 5,
         duration: 0.3,
         ease: "power2.inOut",
-        backgroundColor: "#06C755"
+        // Updated to Iron Red
+        backgroundColor: "#FF1F1F" 
       })
       .to(bottomLineRef.current, {
         rotate: -45,
         y: -5,
         duration: 0.3,
         ease: "power2.inOut",
-        backgroundColor: "#06C755"
+        // Updated to Iron Red
+        backgroundColor: "#FF1F1F"
       }, "<");
   }, []);
 
@@ -89,7 +91,7 @@ const Navbar = () => {
     { id: "services", label: "PROTOCOLS" },
     { id: "about", label: "ABOUT US" },
     { id: "tracks", label: "TRACKS" },
-    { id: "contact", label: "EVENT HIGHLIGHTS" }
+    { id: "contact", label: "CONTACT US" }
   ];
 
   return (
@@ -97,35 +99,33 @@ const Navbar = () => {
       {/* --- NAVIGATION PANEL --- */}
       <nav
         ref={navRef}
-        // Changed bg-line-dark/95 to bg-line-dark/90 for slightly more transparency to see the image
-        className="fixed top-0 right-0 z-40 flex flex-col justify-between w-full md:w-[600px] h-full px-8 md:px-16 py-24 bg-line-dark/90 backdrop-blur-xl border-l border-line-green/30 shadow-[-50px_0_100px_rgba(0,0,0,0.8)] overflow-hidden"
+        // Updated Border to Red
+        className="fixed top-0 right-0 z-40 flex flex-col justify-between w-full md:w-[600px] h-full px-8 md:px-16 py-24 bg-line-dark/90 backdrop-blur-xl border-l border-iron-red/30 shadow-[-50px_0_100px_rgba(0,0,0,0.8)] overflow-hidden"
       >
         
         {/* === NEW BACKGROUND LAYERS === */}
         
-        {/* 1. Iron Man Image Layer (Grayscale & Tech Filtered) */}
+        {/* 1. Iron Man Image Layer */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
             backgroundImage: `url("/assets/ironman.jpg")`,
             backgroundSize: "cover",
-            // Focus on the upper part for a vertical menu
             backgroundPosition: "center top", 
-            // High contrast grayscale for the tech look
             filter: "grayscale(100%) contrast(1.3) brightness(0.7)",
-            opacity: 0.4 // Subtle opacity
+            opacity: 0.4
           }}
         />
 
-        {/* 2. Green HUD Gradient Overlay (Tints the image green) */}
-        <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-line-green/30 via-transparent to-line-dark/90 mix-blend-overlay" />
+        {/* 2. Red HUD Gradient Overlay */}
+        <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-iron-red/30 via-transparent to-line-dark/90 mix-blend-overlay" />
 
         {/* 3. Existing Grid Texture */}
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none z-0" />
         
         
-        {/* Decorative Top Label */}
-        <div className="absolute top-6 right-6 font-mono text-[10px] text-line-green opacity-50 z-10">
+        {/* Decorative Top Label Red */}
+        <div className="absolute top-6 right-6 font-mono text-[10px] text-iron-red opacity-50 z-10">
           NAV_SYSTEM_V2.0 // ONLINE
         </div>
 
@@ -141,8 +141,8 @@ const Navbar = () => {
                 duration={1000}
                 onClick={toggleMenu}
               >
-                {/* Tech Bullet Point */}
-                <span className="text-line-green opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                {/* Tech Bullet Point Red */}
+                <span className="text-iron-red opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                   <Icon icon="lucide:chevron-right" />
                 </span>
                 
@@ -151,8 +151,8 @@ const Navbar = () => {
                   {link.label}
                 </span>
               </Link>
-              {/* Underline Decoration */}
-              <div className="h-px w-full bg-white/10 mt-4 group-hover:bg-line-green/50 transition-colors duration-500" />
+              {/* Underline Decoration Red */}
+              <div className="h-px w-full bg-white/10 mt-4 group-hover:bg-iron-red/50 transition-colors duration-500" />
             </div>
           ))}
         </div>
@@ -163,21 +163,22 @@ const Navbar = () => {
             
             {/* Email Block */}
             <div className="font-mono">
-              <p className="text-xs text-line-green mb-1">[ SECURE_MAIL ]</p>
-              <a href="mailto:indiapentaverse@gmail.com" className="text-lg text-white hover:text-line-green transition-colors">
+              <p className="text-xs text-iron-red mb-1">[ SECURE_MAIL ]</p>
+              <a href="mailto:indiapentaverse@gmail.com" className="text-lg text-white hover:text-iron-red transition-colors">
                 indiapentaverse@gmail.com
               </a>
             </div>
 
             {/* Socials Block */}
             <div className="font-mono">
-              <p className="text-xs text-line-green mb-2">[ NETWORK_NODES ]</p>
+              <p className="text-xs text-iron-red mb-2">[ NETWORK_NODES ]</p>
               <div className="flex flex-wrap gap-4">
                 {socials.map((social, index) => (
                   <a
                     key={index}
                     href={social.href}
-                    className="text-xs px-3 py-1 border border-white/20 text-gray-400 hover:text-black hover:bg-line-green hover:border-line-green transition-all uppercase"
+                    // Updated Hover Colors to Red
+                    className="text-xs px-3 py-1 border border-white/20 text-gray-400 hover:text-black hover:bg-iron-red hover:border-iron-red transition-all uppercase"
                   >
                     {social.name}
                   </a>
@@ -200,8 +201,8 @@ const Navbar = () => {
         {/* The Button Container */}
         <div className="relative w-14 h-14 md:w-16 md:h-16 flex flex-col items-center justify-center gap-1.5 group">
           
-          {/* Animated Glowing Border (Only visible when closed) */}
-          <div className={`absolute inset-0 border border-white/30 transition-all duration-300 ${isOpen ? 'rotate-90 scale-75 border-line-green' : 'group-hover:border-line-green group-hover:rotate-45'}`} />
+          {/* Animated Glowing Border (Red on Open/Hover) */}
+          <div className={`absolute inset-0 border border-white/30 transition-all duration-300 ${isOpen ? 'rotate-90 scale-75 border-iron-red' : 'group-hover:border-iron-red group-hover:rotate-45'}`} />
           
           {/* The Lines */}
           <span

@@ -11,7 +11,8 @@ const AnimatedHeaderSection = ({
   title,
   text,
   textColor = "text-white",
-  accentColor = "text-line-green",
+  // 1. Updated default accent color to Iron Red
+  accentColor = "text-iron-red", 
   withScrollTrigger = false,
 }) => {
   const contextRef = useRef(null);
@@ -54,7 +55,8 @@ const AnimatedHeaderSection = ({
         >
           {/* Tech/Mono Subtitle */}
           <div className="flex items-center gap-4 px-10">
-            <span className="h-[2px] w-8 bg-line-green inline-block shadow-[0_0_10px_#06C755]"></span>
+            {/* 2. Updated Background and Shadow to Red (#FF1F1F) */}
+            <span className="h-[2px] w-8 bg-iron-red inline-block shadow-[0_0_10px_#FF1F1F]"></span>
             <p
               className={`text-sm md:text-base font-mono font-bold tracking-[0.3rem] uppercase ${accentColor}`}
             >
@@ -70,7 +72,8 @@ const AnimatedHeaderSection = ({
                 <span 
                   key={index} 
                   className={`
-                    ${index === 1 ? "text-stroke-green text-glow" : ""} 
+                    /* 3. Updated 'text-stroke-green' to 'text-stroke-red' */
+                    ${index === 1 ? "text-stroke-red text-glow" : ""} 
                     ${index === 0 ? "relative z-10" : ""}
                     leading-[0.85]
                   `}
@@ -84,7 +87,8 @@ const AnimatedHeaderSection = ({
       </div>
 
       <div className={`relative px-10 mt-12 ${textColor}`}>
-        <div className="absolute inset-x-0 border-t border-line-green/50" />
+        {/* 4. Updated Border Color to Red */}
+        <div className="absolute inset-x-0 border-t border-iron-red/50" />
         <div className="py-8 sm:py-12 text-end">
           <AnimatedTextLines
             text={text}

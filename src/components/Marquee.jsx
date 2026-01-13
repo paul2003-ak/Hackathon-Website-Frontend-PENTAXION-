@@ -7,18 +7,17 @@ gsap.registerPlugin(Observer);
 
 const Marquee = ({
   items,
-  className = "bg-line-dark border-y border-white/10", // Default: Dark background with subtle borders
-  icon = "lucide:zap", // Default: Tech/Power icon
-  iconClassName = "text-line-green", // Default: Neon Green Icon
+  className = "bg-line-dark border-y border-white/10",
+  icon = "lucide:zap",
+  // CHANGED: Default to Iron Red
+  iconClassName = "text-iron-red", 
   reverse = false,
   speed = 1,
 }) => {
   const containerRef = useRef(null);
   const itemsRef = useRef([]);
 
-  // --- GSAP Horizontal Loop Helper ---
-  // (Standard helper function, untouched logic, just moved inside for clarity if needed, 
-  // but kept as you had it for stability)
+  // ... [horizontalLoop function stays exactly the same] ...
   function horizontalLoop(items, config) {
     items = gsap.utils.toArray(items);
     config = config || {};
@@ -122,7 +121,6 @@ const Marquee = ({
   }
 
   useEffect(() => {
-    // Initialize Horizontal Loop
     const tl = horizontalLoop(itemsRef.current, {
       repeat: -1,
       paddingRight: 30,
@@ -130,7 +128,6 @@ const Marquee = ({
       speed: speed,
     });
 
-    // Initialize Scroll Observer for Velocity Effect
     const observer = Observer.create({
       onChangeY(self) {
         let factor = 2.5;
@@ -148,7 +145,6 @@ const Marquee = ({
       },
     });
 
-    // Cleanup function to prevent memory leaks
     return () => {
       tl.kill();
       observer.kill();
@@ -161,8 +157,8 @@ const Marquee = ({
       className={`overflow-hidden w-full h-20 md:h-[100px] flex items-center marquee-text-responsive font-mono uppercase whitespace-nowrap select-none ${className}`}
     >
       <div className="flex relative">
-        {/* Background Scanline Effect (Optional subtle detail) */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(6,199,85,0.05)_50%,transparent_100%)] w-full h-full pointer-events-none" />
+        {/* CHANGED: Gradient color to Red (255,31,31) */}
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,31,31,0.05)_50%,transparent_100%)] w-full h-full pointer-events-none" />
         
         {items.map((text, index) => (
           <span
@@ -170,12 +166,10 @@ const Marquee = ({
             ref={(el) => (itemsRef.current[index] = el)}
             className="flex items-center px-12 gap-x-12 md:px-16 md:gap-x-32"
           >
-            {/* Outline Text Style by default for "Schematic" look */}
             <span className="text-transparent text-stroke-white hover:text-white transition-colors duration-300 font-black tracking-tighter">
               {text}
             </span> 
             
-            {/* Tech Icon Separator */}
             <Icon 
               icon={icon} 
               className={`text-2xl md:text-4xl ${iconClassName} opacity-80`} 

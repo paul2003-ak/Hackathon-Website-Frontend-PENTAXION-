@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-//
 const TRACKS_DATA = [
   {
     id: "01",
@@ -53,7 +52,6 @@ const TRACKS_DATA = [
   }
 ];
 
-//
 const HIGHLIGHTS_DATA = [
   { title: "36 Hours of Innovation", desc: "Collaborate, code, and create revolutionary prototypes." },
   { title: "Mentorship Rounds", desc: "Learn directly from industry professionals & community experts." },
@@ -89,8 +87,7 @@ const Tracks = () => {
       }
     });
 
-    // 3. FIXED: Animate Highlights (The Grid)
-    // Using fromTo guarantees it animates to opacity 1
+    // 3. Animate Highlights (The Grid)
     gsap.fromTo(".highlight-card", 
       {
         opacity: 0,
@@ -101,10 +98,10 @@ const Tracks = () => {
         y: 0,
         duration: 0.8,
         stagger: 0.15,
-        ease: "back.out(1.2)", // Adds a slight pop effect
+        ease: "back.out(1.2)", 
         scrollTrigger: { 
-          trigger: "#highlights-grid", // Targeting the grid specifically
-          start: "top 90%", // Triggers earlier so you definitely see it
+          trigger: "#highlights-grid", 
+          start: "top 90%",
         }
       }
     );
@@ -152,7 +149,7 @@ const Tracks = () => {
 Identify the problem. Deploy the solution. 
 Build the future.`}
           textColor={"text-white"}
-          accentColor={"text-line-green"}
+          accentColor={"text-iron-red"} // Updated to Red
           withScrollTrigger={true}
         />
         
@@ -166,19 +163,22 @@ Build the future.`}
             >
               <div
                 ref={(el) => (overlayRefs.current[index] = el)}
-                className="absolute inset-0 bg-line-green/10 pointer-events-none clip-path-tech"
+                // Updated Hover BG to Red
+                className="absolute inset-0 bg-iron-red/10 pointer-events-none clip-path-tech"
                 style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)" }}
               />
               <div className="relative px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-between z-10 transition-all duration-300">
                 <div className="flex flex-col gap-1">
-                  <span className="font-mono text-line-green text-sm md:text-base opacity-60">
+                  {/* Updated Subtitle to Red */}
+                  <span className="font-mono text-iron-red text-sm md:text-base opacity-60">
                      // SECTOR_{track.id}
                   </span>
                   <h2 className="text-3xl md:text-5xl font-black text-white uppercase group-hover:text-glow transition-all">
                     {track.title}
                   </h2>
                 </div>
-                <div className="hidden md:block text-white opacity-20 group-hover:opacity-100 group-hover:text-line-green group-hover:translate-x-4 transition-all duration-300">
+                {/* Updated Arrow to Red on Hover */}
+                <div className="hidden md:block text-white opacity-20 group-hover:opacity-100 group-hover:text-iron-red group-hover:translate-x-4 transition-all duration-300">
                    <Icon icon="lucide:chevron-right" width="40" />
                 </div>
               </div>
@@ -193,16 +193,21 @@ Build the future.`}
         className="fixed top-0 left-0 z-50 pointer-events-none opacity-0 invisible hidden md:block"
       >
         {currentIndex !== null && (
-          <div className="w-[450px] bg-black/90 backdrop-blur-xl border border-line-green p-6 shadow-[0_0_30px_rgba(6,199,85,0.3)] rounded-br-3xl">
-            <div className="absolute top-0 left-0 w-full h-1 bg-line-green" />
-            <div className="absolute top-0 left-0 w-1 h-8 bg-line-green" />
+          // Updated Border and Shadow to Red
+          <div className="w-[450px] bg-black/90 backdrop-blur-xl border border-iron-red p-6 shadow-[0_0_30px_rgba(255,31,31,0.3)] rounded-br-3xl">
+            {/* Decorative Lines Red */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-iron-red" />
+            <div className="absolute top-0 left-0 w-1 h-8 bg-iron-red" />
+            
             <div className="flex justify-between items-start mb-4 border-b border-white/10 pb-4">
                <h3 className="font-mono text-white text-xl font-bold uppercase">
                  DATA_PACKET_{TRACKS_DATA[currentIndex].id}
                </h3>
-               <Icon icon="lucide:cpu" className="text-line-green animate-pulse" width="24" />
+               {/* Icon Red */}
+               <Icon icon="lucide:cpu" className="text-iron-red animate-pulse" width="24" />
             </div>
-            <h4 className="font-mono text-line-green text-xs mb-2 tracking-widest">
+            {/* Subtitle Red */}
+            <h4 className="font-mono text-iron-red text-xs mb-2 tracking-widest">
               {TRACKS_DATA[currentIndex].subtitle}
             </h4>
             <p className="text-gray-200 text-lg leading-snug font-light">
@@ -215,30 +220,32 @@ Build the future.`}
       {/* --- SECTION 2: HIGHLIGHTS --- */}
       <div id="highlights-section" className="relative mt-32 px-6 md:px-12">
         <div className="flex items-center gap-4 mb-12">
-           <div className="w-12 h-2 bg-line-green shadow-[0_0_10px_#06C755]" />
+           {/* Section Line Red */}
+           <div className="w-12 h-2 bg-iron-red shadow-[0_0_10px_#FF1F1F]" />
            <h2 className="text-4xl md:text-6xl font-black text-transparent text-stroke-white tracking-tighter uppercase">
              EVENT HIGHLIGHTS
            </h2>
         </div>
 
-        {/* Added id="highlights-grid" for better targeting */}
         <div id="highlights-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {HIGHLIGHTS_DATA.map((item, idx) => (
             <div 
               key={idx} 
-              // Added bg-white/5 as a fallback if line-gray isn't working
-              className="highlight-card group relative p-8 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-line-green/50 transition-all duration-300"
+              // Updated Hover Border to Red
+              className="highlight-card group relative p-8 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-iron-red/50 transition-all duration-300"
             >
-              {/* Corner Accents */}
-              <div className="absolute top-0 left-0 w-2 h-2 bg-white/20 group-hover:bg-line-green transition-colors" />
-              <div className="absolute bottom-0 right-0 w-2 h-2 bg-white/20 group-hover:bg-line-green transition-colors" />
+              {/* Corner Accents Red */}
+              <div className="absolute top-0 left-0 w-2 h-2 bg-white/20 group-hover:bg-iron-red transition-colors" />
+              <div className="absolute bottom-0 right-0 w-2 h-2 bg-white/20 group-hover:bg-iron-red transition-colors" />
               
               <div className="flex items-start gap-4">
-                <div className="mt-1 text-line-green">
+                {/* Icon Red */}
+                <div className="mt-1 text-iron-red">
                    <Icon icon="lucide:zap" width="24" /> 
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white uppercase mb-2 group-hover:text-line-green transition-colors">
+                  {/* Title Hover Red */}
+                  <h3 className="text-xl font-bold text-white uppercase mb-2 group-hover:text-iron-red transition-colors">
                     {item.title}
                   </h3>
                   <p className="text-gray-400 font-mono text-sm leading-relaxed">

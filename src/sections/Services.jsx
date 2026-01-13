@@ -11,27 +11,63 @@ Deploying scalable solutions for
 mission-critical environments.`;
   
   const serviceRefs = useRef([]);
+  const contentRefs = useRef([]);
+  const holoRefs = useRef([]); // New refs for the hologram images
   const isDesktop = useMediaQuery({ minWidth: "48rem" }); // 768px
 
   useGSAP(() => {
-    serviceRefs.current.forEach((el) => {
+    serviceRefs.current.forEach((el, index) => {
       if (!el) return;
 
+      // 1. Main Card Entrance (Slide Up)
       gsap.from(el, {
         y: 100,
         opacity: 0,
         scrollTrigger: {
           trigger: el,
-          start: "top 85%",
+          start: "top 90%",
         },
         duration: 0.8,
         ease: "power2.out",
       });
+
+      // 2. Content Blur exit animation
+      if (contentRefs.current[index]) {
+        gsap.to(contentRefs.current[index], {
+          opacity: 0,
+          filter: "blur(10px)",
+          scale: 0.95,
+          scrollTrigger: {
+            trigger: el,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      // 3. NEW: Hologram Parallax Effect
+      // The image moves slightly slower than the card to create depth
+      if (holoRefs.current[index] && isDesktop) {
+        gsap.fromTo(holoRefs.current[index], 
+          { y: "-10%" }, // Start slightly higher
+          {
+            y: "10%", // End slightly lower
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom", // Start when card enters viewport
+              end: "bottom top", // End when card leaves
+              scrub: 1, // Smooth scrubbing
+            }
+          }
+        );
+      }
     });
-  }, []);
+  }, [isDesktop]);
 
   return (
-    <section id="services" className="relative min-h-screen bg-line-dark clip-path-tech pb-20">
+    <section id="services" className="relative min-h-screen bg-line-dark clip-path-tech pb-40">
       
       {/* Background Grid */}
       <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
@@ -41,65 +77,95 @@ mission-critical environments.`;
         title={"PROTOCOL"}
         text={text}
         textColor={"text-white"}
-        accentColor={"text-line-green"}
+        accentColor={"text-iron-red"}
         withScrollTrigger={true}
       />
 
-      <div className="relative mt-20">
+      <div className="relative mt-20 px-0 md:px-4">
         {servicesData.map((service, index) => (
           <div
             ref={(el) => (serviceRefs.current[index] = el)}
             key={index}
-            // Changed: Added backdrop-blur, border-line-green, and slightly transparent bg
-            className="sticky top-0 px-6 py-12 md:px-10 md:py-16 text-white bg-line-dark/95 backdrop-blur-md border-t border-line-green/50 shadow-[0_-5px_20px_rgba(6,199,85,0.1)]"
-            style={
-              isDesktop
-                ? {
-                    top: `calc(10vh + ${index * 4}rem)`,
-                    marginBottom: `${(servicesData.length - index - 1) * 4}rem`,
-                    // Create a stacking card effect
-                    scale: 1 - (servicesData.length - index) * 0.02, 
-                  }
-                : { top: 0 }
-            }
+            // Solid background, full height, sticky positioning
+            className="sticky top-0 w-full min-h-screen flex flex-col pt-12 md:pt-24 border-t-2 border-iron-red/50 shadow-[0_-10px_50px_rgba(0,0,0,1)] bg-[#0A0A0A] overflow-hidden"
+            style={{
+              zIndex: index + 1, 
+              // Subtle alternating offset for visual interest
+              marginLeft: isDesktop ? `${index % 2 * 2}rem` : 0,
+              marginRight: isDesktop ? `${(index + 1) % 2 * 2}rem` : 0,
+            }}
           >
-            <div className="flex flex-col md:flex-row md:items-start justify-between gap-10">
-              
-              {/* Title Section */}
-              <div className="md:w-1/3">
-                <h2 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter text-transparent text-stroke-white">
-                  {service.title}
-                </h2>
-                <div className="mt-4 w-16 h-1 bg-line-green shadow-[0_0_10px_#06C755]" />
-              </div>
-
-              {/* Content Section */}
-              <div className="md:w-2/3 flex flex-col gap-8">
-                <p className="font-mono text-lg text-gray-400 leading-relaxed">
-                  {`> ${service.description}`}
-                </p>
+            {/* Inner Container for Content (Gets Blurred on exit) */}
+            <div 
+              ref={el => contentRefs.current[index] = el}
+              className="container mx-auto h-full px-6 md:px-0 relative z-10"
+            >
+              <div className="flex flex-col md:flex-row gap-10 md:gap-20 h-full">
                 
-                <div className="flex flex-col gap-6">
-                  {service.items.map((item, itemIndex) => (
-                    <div key={`item-${index}-${itemIndex}`} className="group">
-                      <h3 className="flex items-center text-xl lg:text-2xl font-bold uppercase tracking-tight group-hover:text-line-green transition-colors duration-300">
-                        <span className="mr-6 font-mono text-sm text-line-green opacity-60">
-                          {`0${itemIndex + 1} //`}
-                        </span>
-                        {item.title}
-                      </h3>
-                      {itemIndex < service.items.length - 1 && (
-                        <div className="w-full h-[1px] my-4 bg-gray-800 group-hover:bg-line-green/50 transition-colors" />
-                      )}
-                    </div>
-                  ))}
+                {/* --- LEFT COLUMN: TEXT CONTENT --- */}
+                <div className="md:w-3/5 flex flex-col gap-10 pb-20">
+                   {/* Title */}
+                  <div>
+                    <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter text-transparent text-stroke-white leading-none">
+                      {service.title}
+                    </h2>
+                    <div className="mt-6 w-32 h-2 bg-iron-red shadow-[0_0_30px_#FF1F1F] animate-pulse" />
+                  </div>
+
+                  {/* Description */}
+                  <p className="font-mono text-xl text-gray-300 leading-relaxed border-l-4 border-iron-red pl-6 py-4 bg-white/5 backdrop-blur-sm">
+                    {`> ${service.description}`}
+                  </p>
+                  
+                  {/* List Items */}
+                  <div className="flex flex-col gap-4 mt-4">
+                    {service.items.map((item, itemIndex) => (
+                      <div key={`item-${index}-${itemIndex}`} className="group border-b border-white/10 pb-4 flex items-center">
+                         <div className="w-2 h-2 bg-iron-red mr-4 rounded-full group-hover:shadow-[0_0_10px_#FF1F1F] transition-all"/>
+                        <h3 className="text-2xl lg:text-3xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors duration-300">
+                          {item.title}
+                        </h3>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                {/* --- RIGHT COLUMN: HOLOGRAPHIC VISUAL (Desktop Only) --- */}
+                <div className="hidden md:block md:w-2/5 relative h-[60vh] overflow-hidden rounded-xl border border-iron-red/20 bg-black/50">
+                    {/* Hologram Container with Parallax Ref */}
+                    <div ref={el => holoRefs.current[index] = el} className="absolute inset-0 h-[120%] -top-[10%]">
+                        {/* NOTE: Update your constants.js to include an 'img' property for specific images.
+                           Fallback to generic ironman.jpg if not found.
+                        */}
+                        <img 
+                            src={service.img || "/assets/ironman.jpg"} 
+                            alt={service.title}
+                            className="w-full h-full object-cover opacity-50"
+                            style={{
+                                // CSS Magic to turn a regular image into a Red Hologram
+                                filter: "grayscale(100%) contrast(1.5) sepia(100%) hue-rotate(320deg) saturate(500%) brightness(0.8)",
+                                mixBlendMode: "screen"
+                            }}
+                        />
+                    </div>
+                    
+                    {/* Scanline Overlay */}
+                    <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(255,31,31,0.2)_50%)] bg-[length:100%_4px] pointer-events-none" />
+                    {/* Vignette Overlay */}
+                    <div className="absolute inset-0 bg-radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 100%) pointer-events-none" />
+                    
+                    {/* Tech readout overlay */}
+                    <div className="absolute bottom-4 right-4 font-mono text-xs text-iron-red">
+                        SCHEMATIC_VIEW // {service.title.toUpperCase()}
+                    </div>
+                </div>
+
               </div>
             </div>
-            
-            {/* Tech Decoration */}
-            <div className="absolute top-4 right-4 font-mono text-xs text-line-green opacity-40">
-              SYS_ID: {100 + index}
+
+            {/* Corner ID Badge */}
+            <div className="absolute top-6 right-6 font-mono text-xs text-iron-red opacity-60 border border-iron-red/50 px-3 py-1 rounded-sm bg-black z-20">
+              SYS_ID: {100 + index} // ACTIVE
             </div>
 
           </div>
