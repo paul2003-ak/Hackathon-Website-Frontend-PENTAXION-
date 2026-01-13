@@ -1,0 +1,98 @@
+/* 1. Google Fonts Import MUST be the very first line */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* 2. Tailwind Import */
+@import "tailwindcss";
+
+/* 3. Theme Configuration */
+@theme {
+  /* LINE Hackathon Color Palette */
+  --color-line-green: #06C755;
+  --color-line-dark: #111111;
+  --color-line-gray: #1E1E1E;
+  --color-white: #FFFFFF;
+  
+  /* Fonts */
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Animations */
+  --animate-pulse-glow: pulse-glow 3s infinite ease-in-out;
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; filter: blur(5px); }
+    50% { opacity: 1; filter: blur(15px); }
+  }
+
+  --animate-marquee: marquee 40s infinite linear;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - var(--gap))); }
+  }
+}
+
+/* 4. Global Reset & Base Styles */
+body {
+  background-color: var(--color-line-dark);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+@layer base {
+  h1 {
+    font-weight: 900; /* Extra Bold */
+  }
+}
+
+/* 5. Custom Utilities */
+
+/* -- Hackathon Visuals -- */
+@utility bg-cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+}
+
+/* -- Text Effects (Stroke & Glow) -- */
+@utility text-stroke-green {
+  -webkit-text-stroke: 2px var(--color-line-green);
+  color: transparent;
+}
+
+@utility text-stroke-white {
+  -webkit-text-stroke: 2px var(--color-white);
+  color: transparent;
+}
+
+@utility text-glow {
+  text-shadow: 0 0 30px rgba(6, 199, 85, 0.4);
+}
+
+/* -- Responsive Typography -- */
+@utility banner-text-responsive {
+  @apply 
+  font-black tracking-tighter
+  text-[68px] leading-[0.9]
+  sm:text-[118px] sm:leading-[0.9]
+  md:text-[126px] md:leading-[0.9]
+  lg:text-[152px] lg:leading-[0.85];
+}
+
+@utility value-text-responsive {
+  @apply font-mono text-xl md:text-[22px] lg:text-[24px] text-gray-400;
+}
+
+@utility marquee-text-responsive {
+  @apply font-mono text-[28px] sm:text-[36px] lg:text-[42px];
+}
+
+@utility contact-text-responsive {
+  @apply text-[42px] sm:text-[52px] md:text-[62px] lg:text-[100px];
+}
+
+@utility clip-path-tech {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+}
