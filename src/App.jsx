@@ -1,53 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import ReactLenis from "lenis/react";
+
+// --- SECTIONS (Your existing imports) ---
 import Navbar from "./sections/Navbar";
 import Hero from "./sections/Hero";
 import ServiceSummary from "./sections/ServiceSummary";
 import Services from "./sections/Services";
-import ReactLenis from "lenis/react";
 import About from "./sections/About";
 import Works from "./sections/Works";
 import Contact from "./sections/Contact";
-import { useProgress } from "@react-three/drei";
+
+// --- COMPONENTS ---
+import Preloader from "./components/Preloader"; // Ensure this path is correct!
 
 const App = () => {
-  const { progress } = useProgress();
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    if (progress === 100) {
-      setIsReady(true);
-    }
-  }, [progress]);
+  // We use this state to keep the Preloader visible until it tells us it's done
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <ReactLenis root className="relative w-screen min-h-screen overflow-x-auto">
-      {!isReady && (
-        <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-black text-white transition-opacity duration-700 font-light">
-          <p className="mb-4 text-xl tracking-widest animate-pulse">
-            Loading {Math.floor(progress)}%
-          </p>
-          <div className="relative h-1 overflow-hidden rounded w-60 bg-white/20">
-            <div
-              className="absolute top-0 left-0 h-full transition-all duration-300 bg-white"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        </div>
-      )}
-      <div
-        className={`${
-          isReady ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-1000`}
-      >
+    <ReactLenis root className="relative w-screen min-h-screen overflow-x-auto bg-line-dark">
+      
+      {/* 1. PRELOADER
+        This sits on top of everything (z-index 9999).
+        It handles the "Iron Man Initializing" animation.
+        When it finishes, it calls 'onComplete', which sets isLoading to false.
+      */}
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+
+      {/* 2. MAIN SITE CONTENT
+        We render this immediately so it loads in the background (behind the preloader).
+        'h-screen overflow-hidden' prevents scrolling while loading.
+      */}
+      <div className={`transition-opacity duration-700 ${isLoading ? "h-screen overflow-hidden" : "opacity-100"}`}>
         <Navbar />
         <Hero />
         <ServiceSummary />
         <Services />
         <About />
         <Works />
-        {/* <ContactSummary /> */}
         <Contact />
       </div>
+
     </ReactLenis>
   );
 };
