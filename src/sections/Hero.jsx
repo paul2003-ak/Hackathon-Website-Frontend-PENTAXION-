@@ -2,7 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Planet } from "../components/Planet";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
-import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
+import HackerText from "../components/HackerText"; // 1. Import HackerText
 import { useState, useEffect } from "react";
 
 const Hero = () => {
@@ -73,13 +73,44 @@ connected experiences.`;
       {/* --- CONTENT LAYERS --- */}
       {/* FIX: Added 'pb-32 md:pb-0' to push text up on mobile so it doesn't overlap the timer */}
       <div className="z-10 relative pb-32 md:pb-0">
-        <AnimatedHeaderSection
-          subTitle={"PENTAVERSE INDIA PRESENTS"}
-          title={"PENTA XION"} 
-          text={text}
-          textColor={"text-white"} 
-          accentColor={"text-iron-red"} 
-        />
+        
+        {/* CUSTOM HEADER BLOCK WITH HACKER TEXT */}
+        <div className="w-full">
+           <div className="flex flex-col justify-center gap-6 pt-16 sm:gap-8 px-10">
+              
+              {/* Subtitle */}
+              <div className="flex items-center gap-4">
+                  <span className="h-[2px] w-8 bg-iron-red inline-block shadow-[0_0_10px_#FF1F1F]"></span>
+                  <p className="text-sm md:text-base font-mono font-bold tracking-[0.3rem] uppercase text-iron-red">
+                      PENTAVERSE INDIA PRESENTS
+                  </p>
+              </div>
+
+              {/* Title with HackerText Animation */}
+              <div>
+                <h1 className="flex flex-col uppercase banner-text-responsive text-white">
+                  <span className="leading-[0.85] relative z-10">
+                     <HackerText text="PENTA" />
+                  </span>
+                  <span className="leading-[0.85] text-stroke-red text-glow">
+                     <HackerText text="XION" />
+                  </span>
+                </h1>
+              </div>
+
+           </div>
+        </div>
+
+        {/* Text Description Block */}
+        <div className="relative px-10 mt-12 text-white">
+            <div className="absolute inset-x-0 border-t border-iron-red/50" />
+            <div className="py-8 sm:py-12 text-end">
+                <p className="font-mono leading-relaxed value-text-responsive text-white whitespace-pre-line">
+                    {text}
+                </p>
+            </div>
+        </div>
+
       </div>
 
       {/* --- 2D TIMER SECTION (Bottom Left) --- */}

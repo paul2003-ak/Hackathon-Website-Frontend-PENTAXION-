@@ -1,9 +1,14 @@
 import { useRef } from "react";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
+import HackerText from "../components/HackerText";
 import { servicesData } from "../constants";
 import { useMediaQuery } from "react-responsive";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Icon } from "@iconify/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Services = () => {
   const text = `// SYSTEM ARCHITECTURE
@@ -11,54 +16,79 @@ Deploying scalable solutions for
 mission-critical environments.`;
   
   const serviceRefs = useRef([]);
-  const contentRefs = useRef([]);
-  const holoRefs = useRef([]); // New refs for the hologram images
-  const isDesktop = useMediaQuery({ minWidth: "48rem" }); // 768px
+  const isDesktop = useMediaQuery({ minWidth: "64rem" }); // 1024px
+  
+  // --- 3D TILT STATE ---
+  const handleMouseMove = (e, index) => {
+    if (!isDesktop) return;
+    const card = serviceRefs.current[index];
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+
+    gsap.to(`.holo-container-${index}`, {
+      rotationX: rotateX,
+      rotationY: rotateY,
+      transformPerspective: 1000,
+      duration: 0.4,
+      ease: "power2.out"
+    });
+  };
+
+  const handleMouseLeave = (index) => {
+    gsap.to(`.holo-container-${index}`, {
+      rotationX: 0,
+      rotationY: 0,
+      duration: 0.6,
+      ease: "elastic.out(1, 0.5)"
+    });
+  };
 
   useGSAP(() => {
     serviceRefs.current.forEach((el, index) => {
       if (!el) return;
+      
+      const nextCard = serviceRefs.current[index + 1];
 
-      // 1. Main Card Entrance (Slide Up)
-      gsap.from(el, {
-        y: 100,
-        opacity: 0,
-        scrollTrigger: {
-          trigger: el,
-          start: "top 90%",
-        },
-        duration: 0.8,
-        ease: "power2.out",
-      });
-
-      // 2. Content Blur exit animation
-      if (contentRefs.current[index]) {
-        gsap.to(contentRefs.current[index], {
-          opacity: 0,
-          filter: "blur(10px)",
-          scale: 0.95,
+      // 1. "Push Back" Animation
+      // If there is a next card, animate THIS card to shrink when the next one overlaps it
+      if (nextCard) {
+        gsap.to(el, {
+          scale: 0.9,
+          filter: "brightness(0.4)", // Darken it nicely
+          opacity: 0, // Fade out slightly at the very end
+          transformOrigin: "center top",
+          ease: "none", // Linear ease is best for scrub
           scrollTrigger: {
-            trigger: el,
-            start: "top top",
-            end: "bottom top",
+            trigger: nextCard, // Watch the NEXT card
+            start: "top bottom", // When next card enters bottom of screen
+            end: "top top", // When next card hits top of screen
             scrub: true,
-          },
+          }
         });
       }
 
-      // 3. NEW: Hologram Parallax Effect
-      // The image moves slightly slower than the card to create depth
-      if (holoRefs.current[index] && isDesktop) {
-        gsap.fromTo(holoRefs.current[index], 
-          { y: "-10%" }, // Start slightly higher
-          {
-            y: "10%", // End slightly lower
+      // 2. Internal Parallax (Content moves slightly inside the card)
+      // This makes the text feel like it's floating separately from the background
+      const content = el.querySelector(".service-content");
+      if (content) {
+        gsap.fromTo(content, 
+          { y: 0 },
+          { 
+            y: -50, // Move content up slightly as we scroll
             ease: "none",
             scrollTrigger: {
               trigger: el,
-              start: "top bottom", // Start when card enters viewport
-              end: "bottom top", // End when card leaves
-              scrub: 1, // Smooth scrubbing
+              start: "top top",
+              end: "bottom top",
+              scrub: true
             }
           }
         );
@@ -67,10 +97,10 @@ mission-critical environments.`;
   }, [isDesktop]);
 
   return (
-    <section id="services" className="relative min-h-screen bg-line-dark clip-path-tech pb-40">
+    <section id="services" className="relative bg-line-dark pb-40">
       
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-iron-red/30 shadow-[0_0_20px_#FF1F1F] animate-scan-down pointer-events-none z-0" />
 
       <AnimatedHeaderSection
         subTitle={"SYSTEM CAPABILITIES"}
@@ -81,91 +111,112 @@ mission-critical environments.`;
         withScrollTrigger={true}
       />
 
+      {/* Container with top padding to let header breathe */}
       <div className="relative mt-20 px-0 md:px-4">
         {servicesData.map((service, index) => (
           <div
             ref={(el) => (serviceRefs.current[index] = el)}
             key={index}
-            // Solid background, full height, sticky positioning
-            className="sticky top-0 w-full min-h-screen flex flex-col pt-12 md:pt-24 border-t-2 border-iron-red/50 shadow-[0_-10px_50px_rgba(0,0,0,1)] bg-[#0A0A0A] overflow-hidden"
+            onMouseMove={(e) => handleMouseMove(e, index)}
+            onMouseLeave={() => handleMouseLeave(index)}
+            // STICKY CARD
+            className="sticky top-0 w-full h-screen flex flex-col justify-center overflow-hidden border-t border-white/10"
             style={{
               zIndex: index + 1, 
-              // Subtle alternating offset for visual interest
-              marginLeft: isDesktop ? `${index % 2 * 2}rem` : 0,
-              marginRight: isDesktop ? `${(index + 1) % 2 * 2}rem` : 0,
+              backgroundColor: '#050505', 
+              // Very subtle margin top for the stack effect visual
+              marginTop: index === 0 ? 0 : '-5vh'
             }}
           >
-            {/* Inner Container for Content (Gets Blurred on exit) */}
-            <div 
-              ref={el => contentRefs.current[index] = el}
-              className="container mx-auto h-full px-6 md:px-0 relative z-10"
-            >
-              <div className="flex flex-col md:flex-row gap-10 md:gap-20 h-full">
-                
-                {/* --- LEFT COLUMN: TEXT CONTENT --- */}
-                <div className="md:w-3/5 flex flex-col gap-10 pb-20">
-                   {/* Title */}
-                  <div>
-                    <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter text-transparent text-stroke-white leading-none">
-                      {service.title}
-                    </h2>
-                    <div className="mt-6 w-32 h-2 bg-iron-red shadow-[0_0_30px_#FF1F1F] animate-pulse" />
-                  </div>
+            {/* Top Red Status Bar */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-iron-red to-transparent opacity-50" />
 
-                  {/* Description */}
-                  <p className="font-mono text-xl text-gray-300 leading-relaxed border-l-4 border-iron-red pl-6 py-4 bg-white/5 backdrop-blur-sm">
-                    {`> ${service.description}`}
-                  </p>
+            {/* Content Container - Flex row for layout */}
+            <div className="service-content container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-12 md:gap-20 items-center h-full pt-20">
+                
+                {/* --- LEFT COLUMN: INFO --- */}
+                <div className="md:w-1/2 flex flex-col justify-center">
+                   <div className="font-mono text-xs text-iron-red mb-4 tracking-widest flex items-center gap-2">
+                      <Icon icon="lucide:cpu" />
+                      <span>PROTOCOL_SEQ_{10 + index} // ONLINE</span>
+                   </div>
+
+                   <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
+                      <HackerText text={service.title} />
+                   </h2>
+
+                   <div className="relative pl-6 border-l-2 border-iron-red/50 py-2 mb-10 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
+                      <p className="font-mono text-lg text-gray-300 leading-relaxed">
+                        {service.description}
+                      </p>
+                   </div>
                   
-                  {/* List Items */}
-                  <div className="flex flex-col gap-4 mt-4">
+                  <div className="flex flex-col gap-2">
                     {service.items.map((item, itemIndex) => (
-                      <div key={`item-${index}-${itemIndex}`} className="group border-b border-white/10 pb-4 flex items-center">
-                         <div className="w-2 h-2 bg-iron-red mr-4 rounded-full group-hover:shadow-[0_0_10px_#FF1F1F] transition-all"/>
-                        <h3 className="text-2xl lg:text-3xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors duration-300">
-                          {item.title}
-                        </h3>
+                      <div 
+                        key={`item-${index}-${itemIndex}`} 
+                        className="group flex items-center justify-between p-4 border border-white/5 bg-white/5 hover:bg-iron-red/10 hover:border-iron-red/50 transition-all duration-300 cursor-default rounded-sm"
+                      >
+                        <div className="flex items-center gap-4">
+                            <span className="text-iron-red opacity-50 group-hover:opacity-100 font-mono text-xs">0{itemIndex+1}</span>
+                            <h3 className="text-xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors">
+                              {item.title}
+                            </h3>
+                        </div>
+                        <Icon icon="lucide:chevron-right" className="text-white/20 group-hover:text-iron-red group-hover:translate-x-1 transition-all" />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* --- RIGHT COLUMN: HOLOGRAPHIC VISUAL (Desktop Only) --- */}
-                <div className="hidden md:block md:w-2/5 relative h-[60vh] overflow-hidden rounded-xl border border-iron-red/20 bg-black/50">
-                    {/* Hologram Container with Parallax Ref */}
-                    <div ref={el => holoRefs.current[index] = el} className="absolute inset-0 h-[120%] -top-[10%]">
-                        {/* NOTE: Update your constants.js to include an 'img' property for specific images.
-                           Fallback to generic ironman.jpg if not found.
-                        */}
-                        <img 
-                            src={service.img || "/assets/ironman.jpg"} 
-                            alt={service.title}
-                            className="w-full h-full object-cover opacity-50"
-                            style={{
-                                // CSS Magic to turn a regular image into a Red Hologram
-                                filter: "grayscale(100%) contrast(1.5) sepia(100%) hue-rotate(320deg) saturate(500%) brightness(0.8)",
-                                mixBlendMode: "screen"
-                            }}
-                        />
-                    </div>
-                    
-                    {/* Scanline Overlay */}
-                    <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(255,31,31,0.2)_50%)] bg-[length:100%_4px] pointer-events-none" />
-                    {/* Vignette Overlay */}
-                    <div className="absolute inset-0 bg-radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 100%) pointer-events-none" />
-                    
-                    {/* Tech readout overlay */}
-                    <div className="absolute bottom-4 right-4 font-mono text-xs text-iron-red">
-                        SCHEMATIC_VIEW // {service.title.toUpperCase()}
-                    </div>
-                </div>
+                {/* --- RIGHT COLUMN: 3D HOLOGRAPHIC DISPLAY --- */}
+                <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
+                    <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
+                        <div className="absolute inset-0">
+                            <img 
+                                src={service.img || "/assets/ironman.jpg"} 
+                                alt="Schematic"
+                                className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
+                                style={{
+                                    filter: "grayscale(100%) contrast(1.2) brightness(0.8)",
+                                }}
+                            />
+                            <div className="absolute inset-0 bg-iron-red/20 mix-blend-multiply" />
+                        </div>
 
-              </div>
+                        {/* HUD Elements */}
+                        <div className="absolute inset-0 p-6 flex flex-col justify-between z-20 pointer-events-none">
+                            <div className="flex justify-between items-start border-b border-white/10 pb-4">
+                                <Icon icon="lucide:scan-face" className="text-iron-red text-2xl animate-pulse" />
+                                <div className="text-right">
+                                    <p className="text-[10px] text-iron-red font-mono">TARGET_LOCK</p>
+                                    <p className="text-xs text-white font-mono">{service.title}</p>
+                                </div>
+                            </div>
+                            
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-iron-red/30 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-500">
+                                <div className="w-24 h-24 border border-white/20 rounded-full animate-spin-slow" />
+                                <div className="w-1 h-1 bg-iron-red rounded-full absolute" />
+                            </div>
+
+                            <div className="flex justify-between items-end border-t border-white/10 pt-4">
+                                <div className="flex gap-1">
+                                    <div className="w-1 h-4 bg-iron-red" />
+                                    <div className="w-1 h-6 bg-iron-red/50" />
+                                    <div className="w-1 h-3 bg-iron-red/30" />
+                                </div>
+                                <p className="text-[10px] text-gray-400 font-mono">SYS_INTEGRITY: 100%</p>
+                            </div>
+                        </div>
+                        <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(255,31,31,0.1)_50%,transparent_100%)] h-[20%] w-full animate-scan pointer-events-none" />
+                    </div>
+                    <div className="absolute -z-10 w-[80%] h-[80%] bg-iron-red/10 blur-[80px] rounded-full" />
+                </div>
             </div>
 
-            {/* Corner ID Badge */}
-            <div className="absolute top-6 right-6 font-mono text-xs text-iron-red opacity-60 border border-iron-red/50 px-3 py-1 rounded-sm bg-black z-20">
-              SYS_ID: {100 + index} // ACTIVE
+            {/* Big Background Number */}
+            <div className="absolute bottom-0 right-0 font-black text-[20vw] leading-none text-white/5 pointer-events-none select-none">
+                0{index + 1}
             </div>
 
           </div>
