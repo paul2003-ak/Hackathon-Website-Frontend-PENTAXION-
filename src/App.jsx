@@ -12,6 +12,7 @@ import Contact from "./sections/Contact";
 
 // --- COMPONENTS ---
 import Preloader from "./components/Preloader"; // Ensure this path is correct!
+import Pricing from "./sections/Pricing";
 
 const App = () => {
   // We use this state to keep the Preloader visible until it tells us it's done
@@ -36,6 +37,7 @@ const App = () => {
         <Hero />
         <ServiceSummary />
         <Services />
+        <Pricing/>
         <About />
         <Works />
         <Contact />

@@ -40,7 +40,6 @@ connected experiences.`;
     return () => clearInterval(timer);
   }, []);
 
-  // Helper to add leading zero (e.g., 9 -> 09)
   const format = (num) => (num < 10 ? `0${num}` : num);
   // --- TIMER LOGIC END ---
 
@@ -67,12 +66,13 @@ connected experiences.`;
       {/* 3. Cyber Grid */}
       <div className="absolute inset-0 z-0 bg-cyber-grid opacity-100 pointer-events-none" />
 
-      {/* 4. Decorative Glow Spot (UPDATED TO RED) */}
+      {/* 4. Decorative Glow Spot */}
       <div className="absolute top-14 right-0 w-[500px] h-[500px] bg-iron-red/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen" />
 
 
       {/* --- CONTENT LAYERS --- */}
-      <div className="z-10 relative">
+      {/* FIX: Added 'pb-32 md:pb-0' to push text up on mobile so it doesn't overlap the timer */}
+      <div className="z-10 relative pb-32 md:pb-0">
         <AnimatedHeaderSection
           subTitle={"PENTAVERSE INDIA PRESENTS"}
           title={"PENTA XION"} 
@@ -135,7 +135,6 @@ connected experiences.`;
 
           <Environment resolution={256}>
             <group rotation={[-Math.PI / 3, 0, 1]}>
-              {/* UPDATED LIGHTING TO IRON RED (#FF1F1F) */}
               <Lightformer form={"ring"} color="#FF1F1F" intensity={4} position={[0, 5, -9]} scale={10} />
               <Lightformer form={"rect"} color="#ffffff" intensity={1} position={[0, 3, 1]} scale={5} />
               <Lightformer form={"circle"} color="#FF1F1F" intensity={2} position={[-5, -1, -1]} scale={10} />
