@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
+// Remove AnimatedHeaderSection, we will build a custom PRO version here
+import HackerText from "../components/HackerText"; 
 import { Icon } from "@iconify/react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -11,7 +12,7 @@ const PRIZE_DATA = [
   {
     id: "2nd-place",
     rank: "2ND PLACE",
-    title: "WAR MACHINE", // Heavy Hitter
+    title: "WAR MACHINE", 
     prize: "₹10,000",
     perks: [
       "Silver Certificate",
@@ -24,7 +25,7 @@ const PRIZE_DATA = [
   {
     id: "1st-place",
     rank: "WINNER",
-    title: "MARK LXXXV", // The Ultimate Suit
+    title: "MARK LXXXV", 
     prize: "₹15,000",
     perks: [
       "Gold Certificate of Excellence",
@@ -33,12 +34,12 @@ const PRIZE_DATA = [
       "Investor Pitch Access",
       "Incubation Support"
     ],
-    highlight: true, // Pops out as the main winner
+    highlight: true, 
   },
   {
     id: "3rd-place",
     rank: "3RD PLACE",
-    title: "MARK I", // The Beginning
+    title: "MARK I", 
     prize: "₹7,000",
     perks: [
       "Bronze Certificate",
@@ -54,8 +55,9 @@ const Pricing = () => {
   const containerRef = useRef(null);
 
   useGSAP(() => {
+    // 1. Animate the Cards
     gsap.fromTo(".prize-card", 
-      { y: 50, opacity: 0 },
+      { y: 100, opacity: 0 },
       {
         y: 0,
         opacity: 1,
@@ -64,30 +66,77 @@ const Pricing = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top bottom", 
+          start: "top 60%", // Trigger a bit earlier
           toggleActions: "play none none reverse" 
         },
       }
     );
+
+    // 2. Animate the HUD Rings (Spinning effect)
+    gsap.to(".reactor-ring", {
+      rotation: 360,
+      duration: 20,
+      repeat: -1,
+      ease: "linear"
+    });
+    
+    gsap.to(".reactor-ring-reverse", {
+      rotation: -360,
+      duration: 15,
+      repeat: -1,
+      ease: "linear"
+    });
+
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} id="prizes" className="relative min-h-screen bg-line-dark py-20 overflow-hidden">
+    <section ref={containerRef} id="prizes" className="relative min-h-screen bg-line-dark py-20 overflow-hidden flex flex-col items-center">
       
-      {/* Background Tech Mesh */}
+      {/* --- BACKGROUND FX --- */}
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
+      
+      {/* --- NEW ANIMATED HEADER SECTION --- */}
+      <div className="relative w-full flex flex-col items-center justify-center text-center mb-16 pt-10">
+        
+        {/* 1. Arc Reactor Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-iron-red/10 blur-[80px] rounded-full pointer-events-none" />
 
-      <AnimatedHeaderSection
-        subTitle={"MISSION BOUNTIES"}
-        title={"PRIZE POOL"}
-        text={`// CLAIM YOUR GLORY
-Top innovators will be rewarded with funding and resources.`}
-        textColor={"text-white"}
-        accentColor={"text-iron-red"}
-        withScrollTrigger={true}
-      />
+        {/* 2. Spinning HUD Rings */}
+        <div className="reactor-ring absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border border-dashed border-white/10 rounded-full pointer-events-none" />
+        <div className="reactor-ring-reverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] border-2 border-dotted border-iron-red/20 rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-6 md:px-10 mt-20">
+        {/* 3. Subtitle with Line */}
+        <div className="flex items-center gap-4 mb-6 z-10">
+            <span className="h-[1px] w-12 bg-gradient-to-r from-transparent to-iron-red"></span>
+            <p className="text-sm font-mono font-bold tracking-[0.3rem] uppercase text-iron-red animate-pulse">
+                MISSION BOUNTIES
+            </p>
+            <span className="h-[1px] w-12 bg-gradient-to-l from-transparent to-iron-red"></span>
+        </div>
+
+        {/* 4. Main Title with HackerText */}
+        <h2 className="relative z-10 text-6xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-6 justify-center">
+                <span className="text-stroke-white text-transparent">
+                    <HackerText text="PRIZE" />
+                </span>
+                <span className="text-white text-glow">
+                    <HackerText text="POOL" />
+                </span>
+            </div>
+        </h2>
+
+        {/* 5. Description */}
+        <p className="relative z-10 font-mono text-gray-400 max-w-lg mx-auto leading-relaxed">
+            {`// CLAIM YOUR GLORY`}
+            <br />
+            <span className="text-white/60 text-sm">Top innovators will be rewarded with funding and resources.</span>
+        </p>
+      </div>
+
+
+      {/* --- CARDS CONTAINER --- */}
+      <div className="container mx-auto px-6 md:px-10 z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           
           {PRIZE_DATA.map((item) => (
