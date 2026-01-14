@@ -16,26 +16,21 @@ Deploying scalable solutions for
 mission-critical environments.`;
   
   const serviceRefs = useRef([]);
-  const isDesktop = useMediaQuery({ minWidth: "64rem" }); // 1024px
-  
-  // --- 3D TILT STATE ---
+  const isDesktop = useMediaQuery({ minWidth: "64rem" }); 
+
+  // --- 3D TILT LOGIC (Kept same as before) ---
   const handleMouseMove = (e, index) => {
     if (!isDesktop) return;
     const card = serviceRefs.current[index];
     if (!card) return;
-
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
-
     gsap.to(`.holo-container-${index}`, {
-      rotationX: rotateX,
-      rotationY: rotateY,
+      rotationX: ((y - centerY) / centerY) * -5,
+      rotationY: ((x - centerX) / centerX) * 5,
       transformPerspective: 1000,
       duration: 0.4,
       ease: "power2.out"
@@ -57,41 +52,23 @@ mission-critical environments.`;
       
       const nextCard = serviceRefs.current[index + 1];
 
-      // 1. "Push Back" Animation
-      // If there is a next card, animate THIS card to shrink when the next one overlaps it
+      // --- THE FIX IS HERE ---
       if (nextCard) {
-        gsap.to(el, {
-          scale: 0.9,
-          filter: "brightness(0.4)", // Darken it nicely
-          opacity: 0, // Fade out slightly at the very end
-          transformOrigin: "center top",
-          ease: "none", // Linear ease is best for scrub
+        gsap.to(el.querySelector(".service-content"), {
+          // 1. NO opacity change (keeps it visible)
+          // 2. NO drastic brightness drop (prevents "turning black")
+          // 3. ONLY Blur and slight Scale
+          filter: "blur(15px)", 
+          scale: 0.95, 
+          
+          ease: "none",
           scrollTrigger: {
-            trigger: nextCard, // Watch the NEXT card
-            start: "top bottom", // When next card enters bottom of screen
-            end: "top top", // When next card hits top of screen
+            trigger: nextCard, 
+            start: "top bottom", // Starts when next card enters screen
+            end: "top top", // Ends when next card fully covers this one
             scrub: true,
           }
         });
-      }
-
-      // 2. Internal Parallax (Content moves slightly inside the card)
-      // This makes the text feel like it's floating separately from the background
-      const content = el.querySelector(".service-content");
-      if (content) {
-        gsap.fromTo(content, 
-          { y: 0 },
-          { 
-            y: -50, // Move content up slightly as we scroll
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top top",
-              end: "bottom top",
-              scrub: true
-            }
-          }
-        );
       }
     });
   }, [isDesktop]);
@@ -111,106 +88,97 @@ mission-critical environments.`;
         withScrollTrigger={true}
       />
 
-      {/* Container with top padding to let header breathe */}
-      <div className="relative mt-20 px-0 md:px-4">
+      {/* Snap Container */}
+      <div className="relative mt-20 px-0 md:px-4 snap-y snap-mandatory">
         {servicesData.map((service, index) => (
           <div
             ref={(el) => (serviceRefs.current[index] = el)}
             key={index}
             onMouseMove={(e) => handleMouseMove(e, index)}
             onMouseLeave={() => handleMouseLeave(index)}
-            // STICKY CARD
-            className="sticky top-0 w-full h-screen flex flex-col justify-center overflow-hidden border-t border-white/10"
+            // Sticky & Snap Logic
+            className="sticky top-0 snap-start w-full h-screen flex flex-col justify-center overflow-hidden border-t border-white/10 shadow-[0_-10px_60px_rgba(0,0,0,1)]"
             style={{
               zIndex: index + 1, 
-              backgroundColor: '#050505', 
-              // Very subtle margin top for the stack effect visual
-              marginTop: index === 0 ? 0 : '-5vh'
+              backgroundColor: '#050505', // Solid black background so it covers the previous one
             }}
           >
-            {/* Top Red Status Bar */}
+            {/* Red Bar */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-iron-red to-transparent opacity-50" />
 
-            {/* Content Container - Flex row for layout */}
-            <div className="service-content container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-12 md:gap-20 items-center h-full pt-20">
+            {/* Content Wrapper (Targeted by GSAP for Blur) */}
+            <div className="service-content w-full h-full will-change-transform bg-[#050505]">
                 
-                {/* --- LEFT COLUMN: INFO --- */}
-                <div className="md:w-1/2 flex flex-col justify-center">
-                   <div className="font-mono text-xs text-iron-red mb-4 tracking-widest flex items-center gap-2">
-                      <Icon icon="lucide:cpu" />
-                      <span>PROTOCOL_SEQ_{10 + index} // ONLINE</span>
-                   </div>
+                <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-12 md:gap-20 items-center h-full pt-20">
+                    
+                    {/* --- LEFT: INFO --- */}
+                    <div className="md:w-1/2 flex flex-col justify-center">
+                       <div className="font-mono text-xs text-iron-red mb-4 tracking-widest flex items-center gap-2">
+                          <Icon icon="lucide:cpu" />
+                          <span>PROTOCOL_SEQ_{10 + index} // ONLINE</span>
+                       </div>
 
-                   <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
-                      <HackerText text={service.title} />
-                   </h2>
+                       <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
+                          <HackerText text={service.title} />
+                       </h2>
 
-                   <div className="relative pl-6 border-l-2 border-iron-red/50 py-2 mb-10 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
-                      <p className="font-mono text-lg text-gray-300 leading-relaxed">
-                        {service.description}
-                      </p>
-                   </div>
-                  
-                  <div className="flex flex-col gap-2">
-                    {service.items.map((item, itemIndex) => (
-                      <div 
-                        key={`item-${index}-${itemIndex}`} 
-                        className="group flex items-center justify-between p-4 border border-white/5 bg-white/5 hover:bg-iron-red/10 hover:border-iron-red/50 transition-all duration-300 cursor-default rounded-sm"
-                      >
-                        <div className="flex items-center gap-4">
-                            <span className="text-iron-red opacity-50 group-hover:opacity-100 font-mono text-xs">0{itemIndex+1}</span>
-                            <h3 className="text-xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors">
-                              {item.title}
-                            </h3>
-                        </div>
-                        <Icon icon="lucide:chevron-right" className="text-white/20 group-hover:text-iron-red group-hover:translate-x-1 transition-all" />
+                       <div className="relative pl-6 border-l-2 border-iron-red/50 py-2 mb-10 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
+                          <p className="font-mono text-lg text-gray-300 leading-relaxed">
+                            {service.description}
+                          </p>
+                       </div>
+                      
+                      <div className="flex flex-col gap-2">
+                        {service.items.map((item, itemIndex) => (
+                          <div 
+                            key={`item-${index}-${itemIndex}`} 
+                            className="group flex items-center justify-between p-4 border border-white/5 bg-white/5 hover:bg-iron-red/10 hover:border-iron-red/50 transition-all duration-300 cursor-default rounded-sm"
+                          >
+                            <div className="flex items-center gap-4">
+                                <span className="text-iron-red opacity-50 group-hover:opacity-100 font-mono text-xs">0{itemIndex+1}</span>
+                                <h3 className="text-xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors">
+                                  {item.title}
+                                </h3>
+                            </div>
+                            <Icon icon="lucide:chevron-right" className="text-white/20 group-hover:text-iron-red group-hover:translate-x-1 transition-all" />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* --- RIGHT COLUMN: 3D HOLOGRAPHIC DISPLAY --- */}
-                <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
-                    <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
-                        <div className="absolute inset-0">
-                            <img 
-                                src={service.img || "/assets/ironman.jpg"} 
-                                alt="Schematic"
-                                className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
-                                style={{
-                                    filter: "grayscale(100%) contrast(1.2) brightness(0.8)",
-                                }}
-                            />
-                            <div className="absolute inset-0 bg-iron-red/20 mix-blend-multiply" />
-                        </div>
-
-                        {/* HUD Elements */}
-                        <div className="absolute inset-0 p-6 flex flex-col justify-between z-20 pointer-events-none">
-                            <div className="flex justify-between items-start border-b border-white/10 pb-4">
-                                <Icon icon="lucide:scan-face" className="text-iron-red text-2xl animate-pulse" />
-                                <div className="text-right">
-                                    <p className="text-[10px] text-iron-red font-mono">TARGET_LOCK</p>
-                                    <p className="text-xs text-white font-mono">{service.title}</p>
-                                </div>
-                            </div>
-                            
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-iron-red/30 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-500">
-                                <div className="w-24 h-24 border border-white/20 rounded-full animate-spin-slow" />
-                                <div className="w-1 h-1 bg-iron-red rounded-full absolute" />
-                            </div>
-
-                            <div className="flex justify-between items-end border-t border-white/10 pt-4">
-                                <div className="flex gap-1">
-                                    <div className="w-1 h-4 bg-iron-red" />
-                                    <div className="w-1 h-6 bg-iron-red/50" />
-                                    <div className="w-1 h-3 bg-iron-red/30" />
-                                </div>
-                                <p className="text-[10px] text-gray-400 font-mono">SYS_INTEGRITY: 100%</p>
-                            </div>
-                        </div>
-                        <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(255,31,31,0.1)_50%,transparent_100%)] h-[20%] w-full animate-scan pointer-events-none" />
                     </div>
-                    <div className="absolute -z-10 w-[80%] h-[80%] bg-iron-red/10 blur-[80px] rounded-full" />
+
+                    {/* --- RIGHT: 3D HOLO --- */}
+                    <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
+                        <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
+                            <div className="absolute inset-0">
+                                <img 
+                                    src={service.img || "/assets/ironman.jpg"} 
+                                    alt="Schematic"
+                                    className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
+                                    style={{
+                                        filter: "grayscale(100%) contrast(1.2) brightness(0.8)",
+                                    }}
+                                />
+                                <div className="absolute inset-0 bg-iron-red/20 mix-blend-multiply" />
+                            </div>
+
+                            <div className="absolute inset-0 p-6 flex flex-col justify-between z-20 pointer-events-none">
+                                <div className="flex justify-between items-start border-b border-white/10 pb-4">
+                                    <Icon icon="lucide:scan-face" className="text-iron-red text-2xl animate-pulse" />
+                                    <div className="text-right">
+                                        <p className="text-[10px] text-iron-red font-mono">TARGET_LOCK</p>
+                                        <p className="text-xs text-white font-mono">{service.title}</p>
+                                    </div>
+                                </div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-iron-red/30 rounded-full flex items-center justify-center group-hover:scale-125 transition-transform duration-500">
+                                    <div className="w-24 h-24 border border-white/20 rounded-full animate-spin-slow" />
+                                </div>
+                                <div className="flex justify-between items-end border-t border-white/10 pt-4">
+                                    <p className="text-[10px] text-gray-400 font-mono">SYS_INTEGRITY: 100%</p>
+                                </div>
+                            </div>
+                            <div className="absolute inset-0 bg-[linear-gradient(transparent_0%,rgba(255,31,31,0.1)_50%,transparent_100%)] h-[20%] w-full animate-scan pointer-events-none" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
