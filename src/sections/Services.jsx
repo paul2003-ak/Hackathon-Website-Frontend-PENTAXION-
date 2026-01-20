@@ -16,9 +16,9 @@ Deploying scalable solutions for
 mission-critical environments.`;
   
   const serviceRefs = useRef([]);
+  // Optimization: Only run heavy animations on screens larger than 1024px
   const isDesktop = useMediaQuery({ minWidth: "64rem" }); 
 
-  // --- 3D TILT LOGIC (Kept same as before) ---
   const handleMouseMove = (e, index) => {
     if (!isDesktop) return;
     const card = serviceRefs.current[index];
@@ -47,25 +47,24 @@ mission-critical environments.`;
   };
 
   useGSAP(() => {
+    // IMPORTANT FIX: Stop GSAP from running blur animations on mobile
+    // This removes the "laggy" feeling on Android
+    if (!isDesktop) return; 
+
     serviceRefs.current.forEach((el, index) => {
       if (!el) return;
       
       const nextCard = serviceRefs.current[index + 1];
 
-      // --- THE FIX IS HERE ---
       if (nextCard) {
         gsap.to(el.querySelector(".service-content"), {
-          // 1. NO opacity change (keeps it visible)
-          // 2. NO drastic brightness drop (prevents "turning black")
-          // 3. ONLY Blur and slight Scale
           filter: "blur(15px)", 
           scale: 0.95, 
-          
           ease: "none",
           scrollTrigger: {
             trigger: nextCard, 
-            start: "top bottom", // Starts when next card enters screen
-            end: "top top", // Ends when next card fully covers this one
+            start: "top bottom", 
+            end: "top top", 
             scrub: true,
           }
         });
@@ -100,18 +99,16 @@ mission-critical environments.`;
             className="sticky top-0 snap-start w-full h-screen flex flex-col justify-center overflow-hidden border-t border-white/10 shadow-[0_-10px_60px_rgba(0,0,0,1)]"
             style={{
               zIndex: index + 1, 
-              backgroundColor: '#050505', // Solid black background so it covers the previous one
+              backgroundColor: '#050505', 
             }}
           >
-            {/* Red Bar */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-iron-red to-transparent opacity-50" />
 
-            {/* Content Wrapper (Targeted by GSAP for Blur) */}
             <div className="service-content w-full h-full will-change-transform bg-[#050505]">
                 
                 <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-12 md:gap-20 items-center h-full pt-20">
                     
-                    {/* --- LEFT: INFO --- */}
+                    {/* LEFT: INFO */}
                     <div className="md:w-1/2 flex flex-col justify-center">
                        <div className="font-mono text-xs text-iron-red mb-4 tracking-widest flex items-center gap-2">
                           <Icon icon="lucide:cpu" />
@@ -146,7 +143,7 @@ mission-critical environments.`;
                       </div>
                     </div>
 
-                    {/* --- RIGHT: 3D HOLO --- */}
+                    {/* RIGHT: 3D HOLO */}
                     <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
                         <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
                             <div className="absolute inset-0">
@@ -182,7 +179,6 @@ mission-critical environments.`;
                 </div>
             </div>
 
-            {/* Big Background Number */}
             <div className="absolute bottom-0 right-0 font-black text-[20vw] leading-none text-white/5 pointer-events-none select-none">
                 0{index + 1}
             </div>
