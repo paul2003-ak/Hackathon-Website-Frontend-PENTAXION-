@@ -7,9 +7,9 @@ import { useMediaQuery } from "react-responsive";
 
 // --- SECTIONS ---
 import Navbar from "./sections/Navbar";
-import Hero from "./sections/Hero";
 import ServiceSummary from "./sections/ServiceSummary";
-import Services from "./sections/Services";
+import Hero from "./sections/Hero";
+import Services from "./sections/Services"; // Tracks
 import Pricing from "./sections/Pricing"; 
 import About from "./sections/About";
 import Works from "./sections/Works";
@@ -24,9 +24,9 @@ gsap.registerPlugin(ScrollTrigger);
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const lenisRef = useRef();
-  
-  // Optimization: Don't render CustomCursor on mobile
-  const isDesktop = useMediaQuery({ minWidth: "64rem" });
+
+  // PERFORMANCE: Only render custom cursor on Desktop (saves GPU on mobile)
+  const isDesktop = useMediaQuery({ minWidth: 1024 });
 
   useGSAP(() => {
     function update(time) {
@@ -41,14 +41,14 @@ const App = () => {
       ref={lenisRef}
       root 
       options={{
-        lerp: 0.05,       
-        duration: 1.5,    
-        smoothTouch: false, // Ensures native scrolling on mobile (Performance Saver)
+        lerp: 0.1,          // Increased from 0.05 for snappier/faster scroll
+        duration: 1.2,      
+        smoothTouch: false, // CRITICAL: Uses native scroll on mobile (much smoother/faster)
         smoothWheel: true,
       }}
-      className="relative w-screen min-h-screen overflow-x-auto bg-line-dark"
+      className="relative w-screen min-h-screen overflow-x-hidden bg-line-dark"
     >
-      {/* Optimization: Only show Custom Cursor on Desktop */}
+      {/* Only show cursor on desktop */}
       {isDesktop && <CustomCursor />}
       
       {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
@@ -69,3 +69,6 @@ const App = () => {
 };
 
 export default App;
+
+
+  

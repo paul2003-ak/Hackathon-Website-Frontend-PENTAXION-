@@ -1,5 +1,4 @@
 import { useRef } from "react";
-// Remove AnimatedHeaderSection, we will build a custom PRO version here
 import HackerText from "../components/HackerText"; 
 import { Icon } from "@iconify/react";
 import { useGSAP } from "@gsap/react";
@@ -66,7 +65,7 @@ const Pricing = () => {
         ease: "power3.out",
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 60%", // Trigger a bit earlier
+          start: "top 75%",
           toggleActions: "play none none reverse" 
         },
       }
@@ -93,30 +92,30 @@ const Pricing = () => {
     <section ref={containerRef} id="prizes" className="relative min-h-screen bg-line-dark py-20 overflow-hidden flex flex-col items-center">
       
       {/* --- BACKGROUND FX --- */}
-      <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none z-0" />
       
-      {/* --- NEW ANIMATED HEADER SECTION --- */}
-      <div className="relative w-full flex flex-col items-center justify-center text-center mb-16 pt-10">
+      {/* --- ANIMATED HEADER SECTION --- */}
+      <div className="relative w-full flex flex-col items-center justify-center text-center mb-16 pt-10 z-10">
         
-        {/* 1. Arc Reactor Background Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-iron-red/10 blur-[80px] rounded-full pointer-events-none" />
+        {/* 1. Arc Reactor Background Glow (Fixed Z-Index) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-iron-red/10 blur-[80px] rounded-full pointer-events-none -z-10" />
 
         {/* 2. Spinning HUD Rings */}
-        <div className="reactor-ring absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border border-dashed border-white/10 rounded-full pointer-events-none" />
-        <div className="reactor-ring-reverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] border-2 border-dotted border-iron-red/20 rounded-full pointer-events-none" />
+        <div className="reactor-ring absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[350px] h-[280px] md:h-[350px] border border-dashed border-white/10 rounded-full pointer-events-none -z-10" />
+        <div className="reactor-ring-reverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] md:w-[280px] h-[220px] md:h-[280px] border-2 border-dotted border-iron-red/20 rounded-full pointer-events-none -z-10" />
 
         {/* 3. Subtitle with Line */}
-        <div className="flex items-center gap-4 mb-6 z-10">
-            <span className="h-[1px] w-12 bg-gradient-to-r from-transparent to-iron-red"></span>
-            <p className="text-sm font-mono font-bold tracking-[0.3rem] uppercase text-iron-red animate-pulse">
+        <div className="flex items-center gap-4 mb-6">
+            <span className="h-[1px] w-8 md:w-12 bg-gradient-to-r from-transparent to-iron-red"></span>
+            <p className="text-xs md:text-sm font-mono font-bold tracking-[0.3rem] uppercase text-iron-red animate-pulse">
                 MISSION BOUNTIES
             </p>
-            <span className="h-[1px] w-12 bg-gradient-to-l from-transparent to-iron-red"></span>
+            <span className="h-[1px] w-8 md:w-12 bg-gradient-to-l from-transparent to-iron-red"></span>
         </div>
 
-        {/* 4. Main Title with HackerText */}
-        <h2 className="relative z-10 text-6xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6">
-            <div className="flex flex-col md:flex-row gap-2 md:gap-6 justify-center">
+        {/* 4. Main Title */}
+        <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-6 justify-center items-center">
                 <span className="text-stroke-white text-transparent">
                     <HackerText text="PRIZE" />
                 </span>
@@ -127,30 +126,31 @@ const Pricing = () => {
         </h2>
 
         {/* 5. Description */}
-        <p className="relative z-10 font-mono text-gray-400 max-w-lg mx-auto leading-relaxed">
+        <p className="font-mono text-gray-400 max-w-sm md:max-w-lg mx-auto leading-relaxed text-sm md:text-base px-4">
             {`// CLAIM YOUR GLORY`}
             <br />
-            <span className="text-white/60 text-sm">Top innovators will be rewarded with funding and resources.</span>
+            <span className="text-white/60">Top innovators will be rewarded with funding and resources.</span>
         </p>
       </div>
 
 
       {/* --- CARDS CONTAINER --- */}
-      <div className="container mx-auto px-6 md:px-10 z-10">
+      <div className="container mx-auto px-6 md:px-10 z-10 w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           
           {PRIZE_DATA.map((item) => (
             <div
               key={item.id}
+              // FIX: Mobile scaling (scale-100) vs Desktop scaling (scale-110)
               className={`prize-card relative flex flex-col p-8 rounded-2xl border transition-all duration-500 group
                 ${item.highlight 
-                  ? "bg-iron-red/10 border-iron-red scale-105 shadow-[0_0_60px_rgba(255,31,31,0.25)] z-10 order-first md:order-none" 
-                  : "bg-white/5 border-white/10 hover:border-iron-red/50 hover:bg-black/40"
+                  ? "bg-iron-red/10 border-iron-red scale-100 md:scale-110 shadow-[0_0_60px_rgba(255,31,31,0.25)] z-20 order-first md:order-none" 
+                  : "bg-white/5 border-white/10 hover:border-iron-red/50 hover:bg-black/40 z-10"
                 }
               `}
             >
               {/* Rank Badge */}
-              <div className={`absolute -top-5 left-1/2 -translate-x-1/2 py-2 px-6 font-black font-mono text-sm tracking-widest uppercase rounded-sm shadow-lg
+              <div className={`absolute -top-5 left-1/2 -translate-x-1/2 py-2 px-6 font-black font-mono text-sm tracking-widest uppercase rounded-sm shadow-lg whitespace-nowrap
                 ${item.highlight 
                   ? "bg-iron-red text-black shadow-[0_0_20px_#FF1F1F]" 
                   : "bg-gray-800 text-gray-400 border border-white/20"
@@ -161,8 +161,8 @@ const Pricing = () => {
 
               {/* Header */}
               <div className="mt-6 mb-8 border-b border-white/10 pb-6 text-center">
-                <h3 className="text-2xl font-bold text-gray-400 uppercase tracking-tighter mb-2">{item.title}</h3>
-                <div className={`text-5xl md:text-6xl font-black ${item.highlight ? 'text-iron-red text-glow' : 'text-white'}`}>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-400 uppercase tracking-tighter mb-2">{item.title}</h3>
+                <div className={`text-4xl md:text-6xl font-black ${item.highlight ? 'text-iron-red text-glow' : 'text-white'}`}>
                   {item.prize}
                 </div>
               </div>
@@ -173,15 +173,15 @@ const Pricing = () => {
                   <li key={idx} className="flex items-center gap-3 text-gray-300 text-sm">
                     <Icon 
                       icon="lucide:trophy" 
-                      className={`text-lg ${item.highlight ? 'text-iron-red' : 'text-gray-500 group-hover:text-iron-red transition-colors'}`} 
+                      className={`text-lg min-w-[18px] ${item.highlight ? 'text-iron-red' : 'text-gray-500 group-hover:text-iron-red transition-colors'}`} 
                     />
-                    <span className="font-mono uppercase tracking-tight">{perk}</span>
+                    <span className="font-mono uppercase tracking-tight text-xs md:text-sm">{perk}</span>
                   </li>
                 ))}
               </ul>
 
               {/* Action / Status */}
-              <div className={`w-full py-4 text-center font-mono font-bold text-xs tracking-widest uppercase border-t 
+              <div className={`w-full py-4 text-center font-mono font-bold text-[10px] md:text-xs tracking-widest uppercase border-t 
                 ${item.highlight ? 'border-iron-red text-iron-red' : 'border-white/10 text-gray-500'}
               `}>
                 STATUS: WAITING_FOR_CHAMPION

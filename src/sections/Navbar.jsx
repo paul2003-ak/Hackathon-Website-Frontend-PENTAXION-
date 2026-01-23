@@ -96,6 +96,29 @@ const Navbar = () => {
 
   return (
     <>
+    {/* =========================================================
+          NEW: LOGO SECTION (Added Top Left)
+      ========================================================= */}
+      <div 
+        className={`fixed z-50 top-6 left-6 md:top-10 md:left-10 transition-transform duration-500 ${!showBurger && !isOpen ? "translate-y-[-200%]" : "translate-y-0"}`}
+      >
+        <a href="#home" className="flex items-center gap-4 group cursor-pointer">
+           
+           {/* Logo Image Container */}
+           <div className="relative w-15 h-15 overflow-hidden rounded-md border border-white/20 group-hover:border-iron-red transition-all duration-300 bg-black/40 backdrop-blur-md z-10">
+              <img src="/assets/logo.jpg" alt="Pentaverse Logo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+              {/* Shine Effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+           </div>
+           
+           {/* Logo Text - NOW HIDDEN BY DEFAULT, REVEALS ON HOVER */}
+           <div className="hidden md:flex flex-col leading-none opacity-0 -translate-x-6 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out">
+              <span className="font-mono font-bold text-lg text-white tracking-widest group-hover:text-iron-red transition-colors duration-300">PENTAVERSE</span>
+              <span className="font-mono text-[9px] text-iron-red tracking-[0.4em] uppercase font-bold">INDIA</span>
+           </div>
+        </a>
+      </div>
+
       {/* --- NAVIGATION PANEL --- */}
       <nav
         ref={navRef}

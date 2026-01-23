@@ -116,23 +116,42 @@ We'd love to hear from you.`}
 
       <div className="flex flex-col lg:flex-row flex-grow w-full relative z-10">
         
-        {/* --- LEFT: 3D SPHERE --- */}
-        <div className="w-full lg:w-1/2 h-[400px] lg:h-auto relative flex items-center justify-center">
-          {/* Decorative Glow Behind Sphere (Red) */}
-          <div className="absolute w-[300px] h-[300px] bg-iron-red/20 blur-[100px] rounded-full" />
+        {/* --- LEFT: 3D SPHERE & QR CODE --- */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
           
-          <Canvas camera={{ position: [0, 0, 5] }}>
-            <ambientLight intensity={0.5} />
-            {/* Point Light Red */}
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#FF1F1F" />
-            <Environment preset="city" />
-            <HoloCore />
-          </Canvas>
+          {/* 3D Sphere */}
+          <div className="h-[400px] w-full relative flex items-center justify-center">
+            {/* Decorative Glow Behind Sphere (Red) */}
+            <div className="absolute w-[300px] h-[300px] bg-iron-red/20 blur-[100px] rounded-full" />
+            
+            <Canvas camera={{ position: [0, 0, 5] }}>
+                <ambientLight intensity={0.5} />
+                {/* Point Light Red */}
+                <pointLight position={[10, 10, 10]} intensity={1.5} color="#FF1F1F" />
+                <Environment preset="city" />
+                <HoloCore />
+            </Canvas>
+          </div>
+
+          {/* ADDED: QR Code Section */}
+          <div className="mt-4 bg-white/5 border border-iron-red/30 p-4 rounded-xl backdrop-blur-md flex flex-col items-center text-center max-w-xs animate-pulse hover:animate-none transition-all">
+               <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-2">Join Bengal Chapter</h4>
+               <p className="text-[10px] text-gray-400 font-mono mb-3">Scan for Official WhatsApp Group</p>
+               
+               <div className="bg-white p-2 rounded-lg mb-3">
+                   {/* Put QR image in public/assets/qr.png */}
+                   <img src="/assets/qr.png" alt="Bengal Chapter QR" className="w-32 h-32 object-contain" />
+               </div>
+               
+               <div className="text-[10px] font-mono text-iron-red flex items-center gap-2">
+                   <Icon icon="lucide:scan" /> SCAN_COMPLETE
+               </div>
+          </div>
         </div>
 
 
         {/* --- RIGHT: 2x2 GRID --- */}
-        <div className="w-full lg:w-1/2 px-6 md:px-12 flex flex-col justify-center pb-20 lg:pb-0">
+        <div className="w-full lg:w-1/2 px-6 md:px-12 flex flex-col justify-center pb-20 lg:pb-0 mt-10 lg:mt-0">
           
           {/* THE GRID */}
           <div id="contact-grid" className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto">
@@ -171,21 +190,6 @@ We'd love to hear from you.`}
               </a>
             ))}
           </div>
-
-          {/* QR Code Section (Bottom Right) */}
-          <div className="mt-12 flex justify-center md:justify-end opacity-60 hover:opacity-100 transition-opacity">
-            <div className="flex items-center gap-4 bg-black/30 p-4 border border-white/10 rounded-xl">
-               <div className="text-right hidden md:block">
-                 {/* Text Red */}
-                 <p className="font-mono text-[10px] text-iron-red">SCAN_FOR_ACCESS</p>
-                 <p className="text-xs text-white">ID: #PV_2026</p>
-               </div>
-               <div className="w-12 h-12 bg-white p-1 rounded-sm">
-                 <Icon icon="lucide:qr-code" className="w-full h-full text-black" />
-               </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>

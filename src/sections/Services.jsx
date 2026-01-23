@@ -48,7 +48,6 @@ mission-critical environments.`;
 
   useGSAP(() => {
     // IMPORTANT FIX: Stop GSAP from running blur animations on mobile
-    // This removes the "laggy" feeling on Android
     if (!isDesktop) return; 
 
     serviceRefs.current.forEach((el, index) => {
@@ -129,15 +128,25 @@ mission-critical environments.`;
                         {service.items.map((item, itemIndex) => (
                           <div 
                             key={`item-${index}-${itemIndex}`} 
-                            className="group flex items-center justify-between p-4 border border-white/5 bg-white/5 hover:bg-iron-red/10 hover:border-iron-red/50 transition-all duration-300 cursor-default rounded-sm"
+                            // FIX: Added conditional class logic for mobile to force visibility
+                            className={`group flex items-center justify-between p-4 border transition-all duration-300 cursor-default rounded-sm
+                                ${!isDesktop 
+                                    ? "bg-iron-red/5 border-iron-red/40" // Mobile: Always visible
+                                    : "bg-white/5 border-white/5 hover:bg-iron-red/10 hover:border-iron-red/50" // Desktop: Hover effect
+                                }`}
                           >
                             <div className="flex items-center gap-4">
-                                <span className="text-iron-red opacity-50 group-hover:opacity-100 font-mono text-xs">0{itemIndex+1}</span>
-                                <h3 className="text-xl font-bold uppercase tracking-tight text-white group-hover:text-iron-red transition-colors">
+                                <span className={`font-mono text-xs ${!isDesktop ? "text-iron-red" : "text-iron-red opacity-50 group-hover:opacity-100"}`}>
+                                    0{itemIndex+1}
+                                </span>
+                                <h3 className={`text-xl font-bold uppercase tracking-tight transition-colors ${!isDesktop ? "text-white" : "text-white group-hover:text-iron-red"}`}>
                                   {item.title}
                                 </h3>
                             </div>
-                            <Icon icon="lucide:chevron-right" className="text-white/20 group-hover:text-iron-red group-hover:translate-x-1 transition-all" />
+                            <Icon 
+                                icon="lucide:chevron-right" 
+                                className={`transition-all ${!isDesktop ? "text-iron-red" : "text-white/20 group-hover:text-iron-red group-hover:translate-x-1"}`} 
+                            />
                           </div>
                         ))}
                       </div>
@@ -146,6 +155,7 @@ mission-critical environments.`;
                     {/* RIGHT: 3D HOLO */}
                     <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
                         <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
+                            {/* ... (Kept existing visual code) ... */}
                             <div className="absolute inset-0">
                                 <img 
                                     src={service.img || "/assets/ironman.jpg"} 
