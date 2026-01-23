@@ -19,8 +19,13 @@ const Preloader = ({ onComplete }) => {
   const ringsRef = useRef(null);
   const titleRef = useRef(null);
 
-  // --- 1. PROGRESS LOGIC ---
+  // --- 1. OPTIMIZED PROGRESS LOGIC ---
   useEffect(() => {
+    // Safety Fallback: Force finish after 2.5 seconds max if page lags
+    const safetyTimer = setTimeout(() => {
+        setProgress(100);
+    }, 2500);
+
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -28,11 +33,11 @@ const Preloader = ({ onComplete }) => {
           return 100;
         }
         
-        // Randomize speed for "realism"
-        const jump = Math.floor(Math.random() * 5) + 1; 
+        // FASTER: Random jump between 3% and 10%
+        const jump = Math.floor(Math.random() * 8) + 3; 
         const next = Math.min(prev + jump, 100);
 
-        // Update Text Phase based on percentage
+        // Update Text Phase
         if (next < 30) setPhaseIndex(0);
         else if (next < 50) setPhaseIndex(1);
         else if (next < 70) setPhaseIndex(2);
@@ -41,14 +46,17 @@ const Preloader = ({ onComplete }) => {
 
         return next;
       });
-    }, 80); // Faster updates for smoother numbers
+    }, 30); // FASTER: Updates every 30ms
 
-    return () => clearInterval(timer);
+    return () => {
+        clearInterval(timer);
+        clearTimeout(safetyTimer);
+    };
   }, []);
 
   // --- 2. ANIMATIONS ---
   useGSAP(() => {
-    // A. Constant Idle Animations (Spinning Rings)
+    // A. Constant Idle Animations
     gsap.to(".ring-outer", { 
       rotation: 360, 
       duration: 8, 
@@ -62,7 +70,7 @@ const Preloader = ({ onComplete }) => {
       ease: "linear" 
     });
 
-    // B. Glitch Text Intro for Title
+    // B. Glitch Text Intro
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&";
     const originalText = "PENTAXION";
     let iterations = 0;
@@ -78,17 +86,18 @@ const Preloader = ({ onComplete }) => {
         .join("");
         
         if (iterations >= originalText.length) clearInterval(interval);
-        iterations += 1 / 3;
-    }, 50);
+        iterations += 1 / 2; // Faster text decode
+    }, 40);
 
 
-    // C. Exit Sequence (When Progress == 100)
+    // C. Exit Sequence
     if (progress === 100) {
+      clearInterval(interval); // Clean up text glitch
+      
       const tl = gsap.timeline({
         onComplete: onComplete,
       });
 
-      // 1. Flash & Scale Out Content
       tl.to(contentRef.current, {
         scale: 1.1,
         opacity: 0,
@@ -96,7 +105,6 @@ const Preloader = ({ onComplete }) => {
         duration: 0.4,
         ease: "power2.in"
       })
-      // 2. Slide Up "Blast Door"
       .to(containerRef.current, {
         yPercent: -100,
         duration: 0.8,
@@ -119,13 +127,9 @@ const Preloader = ({ onComplete }) => {
         
         {/* --- ARC REACTOR LOADER --- */}
         <div ref={ringsRef} className="relative w-32 h-32 flex items-center justify-center">
-            {/* Outer Ring */}
             <div className="ring-outer absolute inset-0 border border-dashed border-iron-red/40 rounded-full w-full h-full shadow-[0_0_30px_rgba(255,31,31,0.1)]" />
-            
-            {/* Middle Ring */}
             <div className="ring-inner absolute inset-2 border-2 border-l-transparent border-r-transparent border-t-iron-red border-b-iron-red rounded-full w-[85%] h-[85%] m-auto" />
             
-            {/* Core */}
             <div className="absolute w-12 h-12 bg-iron-red rounded-full animate-pulse shadow-[0_0_40px_#FF1F1F] flex items-center justify-center">
                 <div className="w-8 h-8 bg-white/80 rounded-full blur-[2px]" />
             </div>
@@ -147,24 +151,19 @@ const Preloader = ({ onComplete }) => {
             </div>
         </div>
 
-        {/* --- PROGRESS BAR (HUD STYLE) --- */}
+        {/* --- PROGRESS BAR --- */}
         <div className="w-64 md:w-96 h-2 bg-white/5 rounded-none border border-white/10 relative overflow-hidden mt-4">
-            {/* Moving Bar */}
             <div 
                 className="h-full bg-iron-red shadow-[0_0_20px_#FF1F1F] transition-all duration-100 ease-linear relative"
                 style={{ width: `${progress}%` }}
             >
-                {/* Leading Edge Highlight */}
                 <div className="absolute right-0 top-0 h-full w-2 bg-white blur-[2px]" />
             </div>
-            
-            {/* Scanlines overlay on bar */}
             <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_50%,rgba(0,0,0,0.8)_50%)] bg-[length:4px_100%] opacity-30 pointer-events-none" />
         </div>
 
       </div>
 
-      {/* Bottom Footer Text */}
       <div className="absolute bottom-12 font-mono text-[10px] text-white/30 tracking-[0.2em]">
          ID: STARK_IND_V.2.0.4 // SECURE_BOOT
       </div>

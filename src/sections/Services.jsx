@@ -2,7 +2,6 @@ import { useRef } from "react";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import HackerText from "../components/HackerText";
 import { servicesData } from "../constants";
-import { useMediaQuery } from "react-responsive";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,12 +14,14 @@ const Services = () => {
 Deploying scalable solutions for 
 mission-critical environments.`;
   
+  const containerRef = useRef(null);
   const serviceRefs = useRef([]);
-  // Optimization: Only run heavy animations on screens larger than 1024px
-  const isDesktop = useMediaQuery({ minWidth: "64rem" }); 
 
+  // --- MOUSE TILT EFFECT (Desktop Only Logic in CSS/GSAP) ---
   const handleMouseMove = (e, index) => {
-    if (!isDesktop) return;
+    // Quick check to prevent running on mobile
+    if (window.innerWidth < 1024) return;
+    
     const card = serviceRefs.current[index];
     if (!card) return;
     const rect = card.getBoundingClientRect();
@@ -28,6 +29,7 @@ mission-critical environments.`;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
+    
     gsap.to(`.holo-container-${index}`, {
       rotationX: ((y - centerY) / centerY) * -5,
       rotationY: ((x - centerX) / centerX) * 5,
@@ -46,33 +48,43 @@ mission-critical environments.`;
     });
   };
 
+  // --- GSAP ANIMATIONS (Responsive) ---
   useGSAP(() => {
-    // IMPORTANT FIX: Stop GSAP from running blur animations on mobile
-    if (!isDesktop) return; 
+    let mm = gsap.matchMedia();
 
-    serviceRefs.current.forEach((el, index) => {
-      if (!el) return;
-      
-      const nextCard = serviceRefs.current[index + 1];
+    // DESKTOP ANIMATIONS ONLY (min-width: 1024px)
+    mm.add("(min-width: 1024px)", () => {
+      serviceRefs.current.forEach((el, index) => {
+        if (!el) return;
+        
+        const nextCard = serviceRefs.current[index + 1];
 
-      if (nextCard) {
-        gsap.to(el.querySelector(".service-content"), {
-          filter: "blur(15px)", 
-          scale: 0.95, 
-          ease: "none",
-          scrollTrigger: {
-            trigger: nextCard, 
-            start: "top bottom", 
-            end: "top top", 
-            scrub: true,
-          }
-        });
-      }
+        // Only add blur effect if there is a next card
+        if (nextCard) {
+          gsap.to(el.querySelector(".service-content"), {
+            filter: "blur(15px)", 
+            scale: 0.95, 
+            ease: "none",
+            scrollTrigger: {
+              trigger: nextCard, 
+              start: "top bottom", 
+              end: "top top", 
+              scrub: true,
+            }
+          });
+        }
+      });
     });
-  }, [isDesktop]);
+
+    // MOBILE CLEANUP (Ensure no blur remains)
+    mm.add("(max-width: 1023px)", () => {
+      gsap.set(".service-content", { filter: "blur(0px)", scale: 1 });
+    });
+
+  }, { scope: containerRef });
 
   return (
-    <section id="services" className="relative bg-line-dark pb-40">
+    <section ref={containerRef} id="services" className="relative bg-line-dark pb-20 md:pb-40">
       
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-[2px] bg-iron-red/30 shadow-[0_0_20px_#FF1F1F] animate-scan-down pointer-events-none z-0" />
@@ -86,76 +98,75 @@ mission-critical environments.`;
         withScrollTrigger={true}
       />
 
-      {/* Snap Container */}
-      <div className="relative mt-20 px-0 md:px-4 snap-y snap-mandatory">
+      {/* Cards Container */}
+      <div className="relative mt-10 md:mt-20 px-0 md:px-4 snap-y snap-mandatory">
         {servicesData.map((service, index) => (
           <div
             ref={(el) => (serviceRefs.current[index] = el)}
             key={index}
             onMouseMove={(e) => handleMouseMove(e, index)}
             onMouseLeave={() => handleMouseLeave(index)}
-            // Sticky & Snap Logic
-            className="sticky top-0 snap-start w-full h-screen flex flex-col justify-center overflow-hidden border-t border-white/10 shadow-[0_-10px_60px_rgba(0,0,0,1)]"
-            style={{
-              zIndex: index + 1, 
-              backgroundColor: '#050505', 
-            }}
+            // CSS RESPONSIVE CLASSES (No JS Logic)
+            // Mobile: min-h-screen (auto height). Desktop: h-screen (sticky).
+            className="w-full flex flex-col justify-center overflow-hidden border-t border-white/10 shadow-[0_-10px_60px_rgba(0,0,0,1)] relative z-10 bg-[#050505]
+                       min-h-screen h-auto py-16 mb-8
+                       md:sticky md:top-0 md:h-screen md:snap-start md:py-0 md:mb-0"
+            style={{ zIndex: index + 1 }}
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-iron-red to-transparent opacity-50" />
 
-            <div className="service-content w-full h-full will-change-transform bg-[#050505]">
+            {/* Content Wrapper */}
+            <div className="service-content w-full bg-[#050505] h-auto md:h-full md:will-change-transform">
                 
-                <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-12 md:gap-20 items-center h-full pt-20">
+                <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-8 md:gap-20 items-center h-full md:pt-20">
                     
                     {/* LEFT: INFO */}
-                    <div className="md:w-1/2 flex flex-col justify-center">
+                    <div className="w-full md:w-1/2 flex flex-col justify-center">
                        <div className="font-mono text-xs text-iron-red mb-4 tracking-widest flex items-center gap-2">
                           <Icon icon="lucide:cpu" />
                           <span>PROTOCOL_SEQ_{10 + index} // ONLINE</span>
                        </div>
 
-                       <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8">
+                       <h2 className="text-4xl md:text-5xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-6 md:mb-8">
                           <HackerText text={service.title} />
                        </h2>
 
-                       <div className="relative pl-6 border-l-2 border-iron-red/50 py-2 mb-10 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
-                          <p className="font-mono text-lg text-gray-300 leading-relaxed">
+                       <div className="relative pl-6 border-l-2 border-iron-red/50 py-2 mb-8 md:mb-10 bg-gradient-to-r from-white/5 to-transparent rounded-r-lg">
+                          <p className="font-mono text-base md:text-lg text-gray-300 leading-relaxed">
                             {service.description}
                           </p>
                        </div>
                       
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 pb-10 md:pb-0">
                         {service.items.map((item, itemIndex) => (
                           <div 
                             key={`item-${index}-${itemIndex}`} 
-                            // FIX: Added conditional class logic for mobile to force visibility
-                            className={`group flex items-center justify-between p-4 border transition-all duration-300 cursor-default rounded-sm
-                                ${!isDesktop 
-                                    ? "bg-iron-red/5 border-iron-red/40" // Mobile: Always visible
-                                    : "bg-white/5 border-white/5 hover:bg-iron-red/10 hover:border-iron-red/50" // Desktop: Hover effect
-                                }`}
+                            // CSS RESPONSIVE CLASSES
+                            // Mobile: Red bg/border. Desktop: Transparent with Hover.
+                            className="group flex items-center justify-between p-4 border transition-all duration-300 cursor-default rounded-sm
+                                       bg-iron-red/5 border-iron-red/40
+                                       md:bg-white/5 md:border-white/5 md:hover:bg-iron-red/10 md:hover:border-iron-red/50"
                           >
                             <div className="flex items-center gap-4">
-                                <span className={`font-mono text-xs ${!isDesktop ? "text-iron-red" : "text-iron-red opacity-50 group-hover:opacity-100"}`}>
+                                <span className="font-mono text-xs text-iron-red md:text-iron-red md:opacity-50 md:group-hover:opacity-100">
                                     0{itemIndex+1}
                                 </span>
-                                <h3 className={`text-xl font-bold uppercase tracking-tight transition-colors ${!isDesktop ? "text-white" : "text-white group-hover:text-iron-red"}`}>
+                                <h3 className="text-base md:text-xl font-bold uppercase tracking-tight transition-colors text-white md:group-hover:text-iron-red">
                                   {item.title}
                                 </h3>
                             </div>
                             <Icon 
                                 icon="lucide:chevron-right" 
-                                className={`transition-all ${!isDesktop ? "text-iron-red" : "text-white/20 group-hover:text-iron-red group-hover:translate-x-1"}`} 
+                                className="transition-all text-iron-red md:text-white/20 md:group-hover:text-iron-red md:group-hover:translate-x-1" 
                             />
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* RIGHT: 3D HOLO */}
+                    {/* RIGHT: 3D HOLO (Hidden on Mobile, Visible on Desktop) */}
                     <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
                         <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
-                            {/* ... (Kept existing visual code) ... */}
                             <div className="absolute inset-0">
                                 <img 
                                     src={service.img || "/assets/ironman.jpg"} 

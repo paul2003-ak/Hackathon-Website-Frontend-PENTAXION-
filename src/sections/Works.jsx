@@ -107,9 +107,9 @@ const Tracks = () => {
     );
   }, []);
 
-  // --- Interaction Handlers ---
+  // --- Interaction Handlers (Desktop Only Logic) ---
   const handleMouseEnter = (index) => {
-    if (window.innerWidth < 768) return;
+    if (window.innerWidth < 768) return; // Keeps desktop logic isolated
     setCurrentIndex(index);
     const el = overlayRefs.current[index];
     if (el) {
@@ -119,7 +119,7 @@ const Tracks = () => {
   };
 
   const handleMouseLeave = (index) => {
-    if (window.innerWidth < 768) return;
+    if (window.innerWidth < 768) return; // Keeps desktop logic isolated
     const el = overlayRefs.current[index];
     if (el) {
       gsap.to(el, { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", duration: 0.3, ease: "power2.in" });
@@ -149,7 +149,7 @@ const Tracks = () => {
 Identify the problem. Deploy the solution. 
 Build the future.`}
           textColor={"text-white"}
-          accentColor={"text-iron-red"} // Updated to Red
+          accentColor={"text-iron-red"}
           withScrollTrigger={true}
         />
         
@@ -161,23 +161,32 @@ Build the future.`}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={() => handleMouseLeave(index)}
             >
+              {/* --- DESKTOP HOVER OVERLAY (Managed by GSAP) --- */}
               <div
                 ref={(el) => (overlayRefs.current[index] = el)}
-                // Updated Hover BG to Red
                 className="absolute inset-0 bg-iron-red/10 pointer-events-none clip-path-tech"
                 style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)" }}
               />
+
+              {/* --- NEW: MOBILE HOVER/ACTIVE OVERLAY (CSS Only) --- */}
+              {/* Visible ONLY on mobile (md:hidden). Activates on Tap/Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-iron-red/20 to-transparent opacity-0 group-active:opacity-100 group-hover:opacity-100 md:group-hover:opacity-0 transition-opacity duration-300 md:hidden pointer-events-none border-l-4 border-iron-red" />
+
+
               <div className="relative px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-between z-10 transition-all duration-300">
                 <div className="flex flex-col gap-1">
-                  {/* Updated Subtitle to Red */}
+                  {/* Subtitle */}
                   <span className="font-mono text-iron-red text-sm md:text-base opacity-60">
                      // SECTOR_{track.id}
                   </span>
+                  
+                  {/* Title (Glows on both Mobile and Desktop on interaction) */}
                   <h2 className="text-3xl md:text-5xl font-black text-white uppercase group-hover:text-glow transition-all">
                     {track.title}
                   </h2>
                 </div>
-                {/* Updated Arrow to Red on Hover */}
+                
+                {/* Desktop Arrow */}
                 <div className="hidden md:block text-white opacity-20 group-hover:opacity-100 group-hover:text-iron-red group-hover:translate-x-4 transition-all duration-300">
                    <Icon icon="lucide:chevron-right" width="40" />
                 </div>
@@ -193,9 +202,7 @@ Build the future.`}
         className="fixed top-0 left-0 z-50 pointer-events-none opacity-0 invisible hidden md:block"
       >
         {currentIndex !== null && (
-          // Updated Border and Shadow to Red
           <div className="w-[450px] bg-black/90 backdrop-blur-xl border border-iron-red p-6 shadow-[0_0_30px_rgba(255,31,31,0.3)] rounded-br-3xl">
-            {/* Decorative Lines Red */}
             <div className="absolute top-0 left-0 w-full h-1 bg-iron-red" />
             <div className="absolute top-0 left-0 w-1 h-8 bg-iron-red" />
             
@@ -203,10 +210,8 @@ Build the future.`}
                <h3 className="font-mono text-white text-xl font-bold uppercase">
                  DATA_PACKET_{TRACKS_DATA[currentIndex].id}
                </h3>
-               {/* Icon Red */}
                <Icon icon="lucide:cpu" className="text-iron-red animate-pulse" width="24" />
             </div>
-            {/* Subtitle Red */}
             <h4 className="font-mono text-iron-red text-xs mb-2 tracking-widest">
               {TRACKS_DATA[currentIndex].subtitle}
             </h4>
@@ -220,7 +225,6 @@ Build the future.`}
       {/* --- SECTION 2: HIGHLIGHTS --- */}
       <div id="highlights-section" className="relative mt-32 px-6 md:px-12">
         <div className="flex items-center gap-4 mb-12">
-           {/* Section Line Red */}
            <div className="w-12 h-2 bg-iron-red shadow-[0_0_10px_#FF1F1F]" />
            <h2 className="text-4xl md:text-6xl font-black text-transparent text-stroke-white tracking-tighter uppercase">
              EVENT HIGHLIGHTS
@@ -231,20 +235,16 @@ Build the future.`}
           {HIGHLIGHTS_DATA.map((item, idx) => (
             <div 
               key={idx} 
-              // Updated Hover Border to Red
               className="highlight-card group relative p-8 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-iron-red/50 transition-all duration-300"
             >
-              {/* Corner Accents Red */}
               <div className="absolute top-0 left-0 w-2 h-2 bg-white/20 group-hover:bg-iron-red transition-colors" />
               <div className="absolute bottom-0 right-0 w-2 h-2 bg-white/20 group-hover:bg-iron-red transition-colors" />
               
               <div className="flex items-start gap-4">
-                {/* Icon Red */}
                 <div className="mt-1 text-iron-red">
                    <Icon icon="lucide:zap" width="24" /> 
                 </div>
                 <div>
-                  {/* Title Hover Red */}
                   <h3 className="text-xl font-bold text-white uppercase mb-2 group-hover:text-iron-red transition-colors">
                     {item.title}
                   </h3>
