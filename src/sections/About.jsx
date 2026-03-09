@@ -62,15 +62,15 @@ We believe in technology as a tool not just for progress, but for purpose.`;
         title={"ABOUT US"}
         text={missionText}
         textColor={"text-white"}
-        accentColor={"text-iron-red"} // Updated to Red
+        accentColor={"text-iron-red"}
         withScrollTrigger={true}
       />
 
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-16 px-10 mt-16 pb-16">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-16 px-6 md:px-10 mt-16 pb-16 relative z-10">
         
         {/* --- LEFT: HOLOGRAPHIC IMAGE --- */}
         <div className="relative w-full lg:w-1/2 group">
-          {/* Decorative Corners (Red) */}
+          {/* Decorative Corners */}
           <div className="absolute -top-4 -left-4 w-12 h-12 border-t-2 border-l-2 border-iron-red" />
           <div className="absolute -bottom-4 -right-4 w-12 h-12 border-b-2 border-r-2 border-iron-red" />
           
@@ -89,22 +89,23 @@ We believe in technology as a tool not just for progress, but for purpose.`;
             <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] opacity-20 pointer-events-none" />
           </div>
           
-          {/* Status Text (Red) */}
-          <div className="mt-4 flex justify-between font-mono text-xs text-iron-red">
+          {/* Status Text */}
+          <div className="mt-4 flex justify-between font-mono text-[10px] md:text-xs text-iron-red">
             <span>// TARGET: INNOVATION</span>
             <span>STATUS: ACTIVE</span>
           </div>
         </div>
 
 
-        {/* --- RIGHT: DATA READOUT --- */}
-        <div className="w-full lg:w-1/2 flex flex-col gap-8">
-           {/* Info Box with Red Border */}
+        {/* --- RIGHT: DATA READOUT & STATS --- */}
+        <div className="w-full lg:w-1/2 flex flex-col gap-10">
+           
+           {/* 1. Info Box */}
            <div className="p-6 border-l-2 border-iron-red bg-white/5 backdrop-blur-sm">
-              <h3 className="text-iron-red font-mono font-bold text-sm mb-4 tracking-widest">
+              <h3 className="text-iron-red font-mono font-bold text-xs md:text-sm mb-4 tracking-widest">
                 [ SYSTEM DIRECTIVE ]
               </h3>
-              <div className="text-xl md:text-2xl lg:text-3xl font-light leading-relaxed text-gray-300">
+              <div className="text-lg md:text-xl lg:text-2xl font-light leading-relaxed text-gray-300">
                 <AnimatedTextLines 
                   text={detailedText} 
                   className="font-sans" 
@@ -112,16 +113,48 @@ We believe in technology as a tool not just for progress, but for purpose.`;
               </div>
            </div>
 
-           {/* Stats / Badges Area */}
+           {/* 2. Upgraded Event Highlights (Stats) Area */}
            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-line-gray/50 border border-white/10">
-                <p className="text-4xl font-black text-white">24<span className="text-iron-red">H</span></p>
-                <p className="font-mono text-xs text-gray-400 mt-1">DURATION</p>
+              
+              {/* Stat 1 */}
+              <div className="p-4 bg-black/40 border border-white/10 hover:border-iron-red/50 transition-colors">
+                <p className="text-3xl md:text-4xl font-black text-white">100<span className="text-iron-red">+</span></p>
+                <p className="font-mono text-[10px] md:text-xs text-gray-400 mt-1 uppercase tracking-widest">Participants</p>
               </div>
-              <div className="p-4 bg-line-gray/50 border border-white/10">
-                <p className="text-4xl font-black text-white">50<span className="text-iron-red">+</span></p>
-                <p className="font-mono text-xs text-gray-400 mt-1">TEAMS</p>
+              
+              {/* Stat 2 */}
+              <div className="p-4 bg-black/40 border border-white/10 hover:border-iron-red/50 transition-colors">
+                <p className="text-3xl md:text-4xl font-black text-white">20<span className="text-iron-red">+</span></p>
+                <p className="font-mono text-[10px] md:text-xs text-gray-400 mt-1 uppercase tracking-widest">Teams</p>
               </div>
+
+              {/* Stat 3 */}
+              <div className="p-4 bg-black/40 border border-white/10 hover:border-iron-red/50 transition-colors">
+                <p className="text-3xl md:text-4xl font-black text-white">10<span className="text-iron-red">+</span></p>
+                <p className="font-mono text-[10px] md:text-xs text-gray-400 mt-1 uppercase tracking-widest">Mentors</p>
+              </div>
+
+              {/* Stat 4 */}
+              <div className="p-4 bg-black/40 border border-white/10 hover:border-iron-red/50 transition-colors">
+                <p className="text-3xl md:text-4xl font-black text-white">36<span className="text-iron-red">H</span></p>
+                <p className="font-mono text-[10px] md:text-xs text-gray-400 mt-1 uppercase tracking-widest">Hackathon</p>
+              </div>
+
+              {/* Stat 5: Prize Pool (Spans full width for emphasis) */}
+              <div className="col-span-2 p-5 border border-iron-red bg-iron-red/10 shadow-[0_0_15px_rgba(255,31,31,0.2)] flex items-center justify-between group overflow-hidden relative">
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
+                
+                <div className="relative z-10">
+                  <p className="text-3xl md:text-5xl font-black text-iron-red text-glow">₹60K</p>
+                  <p className="font-mono text-[10px] md:text-xs text-white mt-1 uppercase tracking-widest">Total Prize Pool</p>
+                </div>
+
+                {/* Subtext Badge for 30-20-10 split */}
+                <div className="relative z-10 font-mono text-[10px] md:text-xs font-bold text-gray-400 border border-white/20 bg-black/50 px-3 py-1.5 rounded-sm">
+                  ( 30 - 20 - 10 )
+                </div>
+              </div>
+
            </div>
         </div>
 

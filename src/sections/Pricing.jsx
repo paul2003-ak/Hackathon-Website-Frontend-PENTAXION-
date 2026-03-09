@@ -11,13 +11,13 @@ const PRIZE_DATA = [
   {
     id: "2nd-place",
     rank: "2ND PLACE",
-    title: "WAR MACHINE", 
-    prize: "₹10,000",
+    title: "MARK L", 
+    prize: "₹20,000",
     perks: [
-      "Silver Certificate",
-      "Runner-Up Trophy",
-      "Event Swag Kit",
-      "Internship Opportunity"
+      { text: "Silver Certificate", icon: "lucide:award" },
+      { text: "Runner-Up Trophy", icon: "lucide:trophy" },
+      { text: "Event Swag Kit", icon: "lucide:gift" },
+      { text: "Internship Opportunity", icon: "lucide:briefcase" }
     ],
     highlight: false,
   },
@@ -25,26 +25,26 @@ const PRIZE_DATA = [
     id: "1st-place",
     rank: "WINNER",
     title: "MARK LXXXV", 
-    prize: "₹15,000",
+    prize: "₹30,000",
     perks: [
-      "Gold Certificate of Excellence",
-      "Championship Trophy",
-      "Premium Swag Box",
-      "Investor Pitch Access",
-      "Incubation Support"
+      { text: "Gold Certificate of Excellence", icon: "lucide:award" },
+      { text: "Championship Trophy", icon: "lucide:trophy" },
+      { text: "Premium Swags", icon: "lucide:package-open" },
+      { text: "Investor Pitch Access", icon: "lucide:presentation" },
+      { text: "Incubation Support", icon: "lucide:rocket" }
     ],
     highlight: true, 
   },
   {
     id: "3rd-place",
     rank: "3RD PLACE",
-    title: "MARK I", 
-    prize: "₹7,000",
+    title: "MARK XLIV", 
+    prize: "₹10,000",
     perks: [
-      "Bronze Certificate",
-      "Excellence Trophy",
-      "Event Swag Kit",
-      "Mentorship Session"
+      { text: "Bronze Certificate", icon: "lucide:award" },
+      { text: "Excellence Trophy", icon: "lucide:trophy" },
+      { text: "Event Swag Kit", icon: "lucide:gift" },
+      { text: "Mentorship Session", icon: "lucide:users" }
     ],
     highlight: false,
   },
@@ -54,7 +54,6 @@ const Pricing = () => {
   const containerRef = useRef(null);
 
   useGSAP(() => {
-    // 1. Animate the Cards
     gsap.fromTo(".prize-card", 
       { y: 100, opacity: 0 },
       {
@@ -70,22 +69,6 @@ const Pricing = () => {
         },
       }
     );
-
-    // 2. Animate the HUD Rings (Spinning effect)
-    gsap.to(".reactor-ring", {
-      rotation: 360,
-      duration: 20,
-      repeat: -1,
-      ease: "linear"
-    });
-    
-    gsap.to(".reactor-ring-reverse", {
-      rotation: -360,
-      duration: 15,
-      repeat: -1,
-      ease: "linear"
-    });
-
   }, { scope: containerRef });
 
   return (
@@ -95,17 +78,16 @@ const Pricing = () => {
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none z-0" />
       
       {/* --- ANIMATED HEADER SECTION --- */}
-      <div className="relative w-full flex flex-col items-center justify-center text-center mb-16 pt-10 z-10">
+      <div className="relative w-full flex flex-col items-center justify-center text-center mb-20 pt-10 z-10">
         
-        {/* 1. Arc Reactor Background Glow (Fixed Z-Index) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-iron-red/10 blur-[80px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(255,31,31,0.15)_0%,transparent_70%)] rounded-full pointer-events-none -z-10" />
 
-        {/* 2. Spinning HUD Rings */}
-        <div className="reactor-ring absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[350px] h-[280px] md:h-[350px] border border-dashed border-white/10 rounded-full pointer-events-none -z-10" />
-        <div className="reactor-ring-reverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] md:w-[280px] h-[220px] md:h-[280px] border-2 border-dotted border-iron-red/20 rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] md:w-[350px] h-[280px] md:h-[350px] border border-dashed border-white/10 rounded-full pointer-events-none -z-10 animate-[spin_20s_linear_infinite] will-change-transform" style={{ transform: "translate(-50%, -50%) translateZ(0)" }} />
+        
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] md:w-[280px] h-[220px] md:h-[280px] border-2 border-dotted border-iron-red/20 rounded-full pointer-events-none -z-10 animate-[spin_15s_linear_infinite_reverse] will-change-transform" style={{ transform: "translate(-50%, -50%) translateZ(0)" }} />
 
-        {/* 3. Subtitle with Line */}
-        <div className="flex items-center gap-4 mb-6">
+        {/* Subtitle with Line */}
+        <div className="flex items-center gap-4 mb-4">
             <span className="h-[1px] w-8 md:w-12 bg-gradient-to-r from-transparent to-iron-red"></span>
             <p className="text-xs md:text-sm font-mono font-bold tracking-[0.3rem] uppercase text-iron-red animate-pulse">
                 MISSION BOUNTIES
@@ -113,7 +95,7 @@ const Pricing = () => {
             <span className="h-[1px] w-8 md:w-12 bg-gradient-to-l from-transparent to-iron-red"></span>
         </div>
 
-        {/* 4. Main Title */}
+        {/* Main Title */}
         <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter text-white mb-6">
             <div className="flex flex-col md:flex-row gap-2 md:gap-6 justify-center items-center">
                 <span className="text-stroke-white text-transparent">
@@ -125,14 +107,17 @@ const Pricing = () => {
             </div>
         </h2>
 
-        {/* 5. Description */}
-        <p className="font-mono text-gray-400 max-w-sm md:max-w-lg mx-auto leading-relaxed text-sm md:text-base px-4">
-            {`// CLAIM YOUR GLORY`}
-            <br />
-            <span className="text-white/60">Top innovators will be rewarded with funding and resources.</span>
-        </p>
-      </div>
+        {/* Total Prize Pool */}
+        <div className="inline-flex items-center gap-4 border border-iron-red bg-[#1a0505] px-6 py-3 shadow-[0_0_20px_rgba(255,31,31,0.3)] relative overflow-hidden group">
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
+            <Icon icon="lucide:banknote" className="text-iron-red text-2xl md:text-3xl animate-pulse" />
+            <div className="flex flex-col text-left relative z-10">
+                <span className="text-[10px] font-mono text-iron-red tracking-[0.2em] leading-none mb-1">TOTAL_BOUNTY_POOL</span>
+                <span className="text-2xl md:text-3xl font-black text-white leading-none">₹60,000</span>
+            </div>
+        </div>
 
+      </div>
 
       {/* --- CARDS CONTAINER --- */}
       <div className="container mx-auto px-6 md:px-10 z-10 w-full">
@@ -141,19 +126,20 @@ const Pricing = () => {
           {PRIZE_DATA.map((item) => (
             <div
               key={item.id}
-              // FIX: Mobile scaling (scale-100) vs Desktop scaling (scale-110)
               className={`prize-card relative flex flex-col p-8 rounded-2xl border transition-all duration-500 group
                 ${item.highlight 
-                  ? "bg-iron-red/10 border-iron-red scale-100 md:scale-110 shadow-[0_0_60px_rgba(255,31,31,0.25)] z-20 order-first md:order-none" 
-                  : "bg-white/5 border-white/10 hover:border-iron-red/50 hover:bg-black/40 z-10"
+                  ? "bg-iron-red/10 border-iron-red scale-100 md:scale-110 shadow-[0_0_30px_rgba(255,31,31,0.25)] z-20 order-first md:order-none" 
+                  // UPGRADE: Added full hover glow and scale effect for 2nd and 3rd place
+                  : "bg-[#0a0a0a] border-white/10 hover:border-iron-red hover:bg-iron-red/10 hover:shadow-[0_0_30px_rgba(255,31,31,0.25)] hover:scale-[1.02] hover:z-30 z-10"
                 }
               `}
             >
               {/* Rank Badge */}
-              <div className={`absolute -top-5 left-1/2 -translate-x-1/2 py-2 px-6 font-black font-mono text-sm tracking-widest uppercase rounded-sm shadow-lg whitespace-nowrap
+              <div className={`absolute -top-5 left-1/2 -translate-x-1/2 py-2 px-6 font-black font-mono text-sm tracking-widest uppercase rounded-sm shadow-lg whitespace-nowrap transition-all duration-300
                 ${item.highlight 
                   ? "bg-iron-red text-black shadow-[0_0_20px_#FF1F1F]" 
-                  : "bg-gray-800 text-gray-400 border border-white/20"
+                  // UPGRADE: Badge turns red and glows on hover
+                  : "bg-gray-800 text-gray-400 border border-white/20 group-hover:bg-iron-red group-hover:text-black group-hover:shadow-[0_0_20px_#FF1F1F] group-hover:border-iron-red"
                 }
               `}>
                 {item.rank}
@@ -161,8 +147,12 @@ const Pricing = () => {
 
               {/* Header */}
               <div className="mt-6 mb-8 border-b border-white/10 pb-6 text-center">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-400 uppercase tracking-tighter mb-2">{item.title}</h3>
-                <div className={`text-4xl md:text-6xl font-black ${item.highlight ? 'text-iron-red text-glow' : 'text-white'}`}>
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-300 uppercase tracking-tighter mb-2 group-hover:text-white transition-colors">{item.title}</h3>
+                
+                {/* UPGRADE: Prize Text turns glowing red on hover */}
+                <div className={`text-4xl md:text-6xl font-black mt-4 transition-all duration-300 
+                  ${item.highlight ? 'text-iron-red text-glow' : 'text-white group-hover:text-iron-red group-hover:text-glow'}
+                `}>
                   {item.prize}
                 </div>
               </div>
@@ -172,24 +162,28 @@ const Pricing = () => {
                 {item.perks.map((perk, idx) => (
                   <li key={idx} className="flex items-center gap-3 text-gray-300 text-sm">
                     <Icon 
-                      icon="lucide:trophy" 
-                      className={`text-lg min-w-[18px] ${item.highlight ? 'text-iron-red' : 'text-gray-500 group-hover:text-iron-red transition-colors'}`} 
+                      icon={perk.icon} 
+                      className={`text-lg min-w-[18px] transition-colors duration-300 ${item.highlight ? 'text-iron-red' : 'text-gray-500 group-hover:text-iron-red'}`} 
                     />
-                    <span className="font-mono uppercase tracking-tight text-xs md:text-sm">{perk}</span>
+                    <span className="font-mono uppercase tracking-tight text-xs md:text-sm group-hover:text-white transition-colors">{perk.text}</span>
                   </li>
                 ))}
               </ul>
 
               {/* Action / Status */}
-              <div className={`w-full py-4 text-center font-mono font-bold text-[10px] md:text-xs tracking-widest uppercase border-t 
-                ${item.highlight ? 'border-iron-red text-iron-red' : 'border-white/10 text-gray-500'}
+              <div className={`w-full py-4 text-center font-mono font-bold text-[10px] md:text-xs tracking-widest uppercase border-t transition-colors duration-300 
+                ${item.highlight 
+                  ? 'border-iron-red text-iron-red' 
+                  // UPGRADE: Status text and border turn red on hover
+                  : 'border-white/10 text-gray-500 group-hover:border-iron-red group-hover:text-iron-red'
+                }
               `}>
                 STATUS: WAITING_FOR_CHAMPION
               </div>
 
               {/* Decorative Corners */}
-              <div className={`absolute top-0 right-0 w-3 h-3 border-t border-r ${item.highlight ? 'border-iron-red' : 'border-white/20 group-hover:border-iron-red'}`} />
-              <div className={`absolute bottom-0 left-0 w-3 h-3 border-b border-l ${item.highlight ? 'border-iron-red' : 'border-white/20 group-hover:border-iron-red'}`} />
+              <div className={`absolute top-0 right-0 w-3 h-3 border-t border-r transition-colors duration-300 ${item.highlight ? 'border-iron-red' : 'border-white/20 group-hover:border-iron-red'}`} />
+              <div className={`absolute bottom-0 left-0 w-3 h-3 border-b border-l transition-colors duration-300 ${item.highlight ? 'border-iron-red' : 'border-white/20 group-hover:border-iron-red'}`} />
 
             </div>
           ))}

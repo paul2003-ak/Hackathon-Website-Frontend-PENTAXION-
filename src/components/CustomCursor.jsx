@@ -1,83 +1,58 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 
 const CustomCursor = () => {
   const cursorRef = useRef(null);
-  const followerRef = useRef(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const cursorDotRef = useRef(null);
 
   useEffect(() => {
-    // 1. Move the cursor
+    // Ultra-fast GSAP setters
+    const xMoveCursor = gsap.quickTo(cursorRef.current, "x", { duration: 0.1, ease: "power3.out" });
+    const yMoveCursor = gsap.quickTo(cursorRef.current, "y", { duration: 0.1, ease: "power3.out" });
+    
+    const xMoveDot = gsap.quickTo(cursorDotRef.current, "x", { duration: 0.02, ease: "power3.out" });
+    const yMoveDot = gsap.quickTo(cursorDotRef.current, "y", { duration: 0.02, ease: "power3.out" });
+
     const onMouseMove = (e) => {
-      gsap.to(cursorRef.current, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0, // Instant follow
-      });
-      gsap.to(followerRef.current, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.15, // Smooth lag
-        ease: "power2.out",
-      });
+      xMoveCursor(e.clientX);
+      yMoveCursor(e.clientY);
+      xMoveDot(e.clientX);
+      yMoveDot(e.clientY);
     };
 
-    // 2. Detect Hover on Clickable Elements
-    const onMouseEnter = () => setIsHovering(true);
-    const onMouseLeave = () => setIsHovering(false);
-
-    // Add listeners to all buttons and links
-    const clickables = document.querySelectorAll("a, button, .cursor-pointer");
-    clickables.forEach((el) => {
-      el.addEventListener("mouseenter", onMouseEnter);
-      el.addEventListener("mouseleave", onMouseLeave);
-    });
-
-    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mousemove", onMouseMove, { passive: true }); // passive: true helps scrolling performance
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
-      clickables.forEach((el) => {
-        el.removeEventListener("mouseenter", onMouseEnter);
-        el.removeEventListener("mouseleave", onMouseLeave);
-      });
     };
-  }, []); // Run once on mount
-
-  // 3. Animation for Hover State
-  useGSAP(() => {
-    if (isHovering) {
-      gsap.to(followerRef.current, {
-        scale: 3,
-        borderColor: "#FF1F1F", // Iron Red
-        backgroundColor: "rgba(255, 31, 31, 0.1)",
-        duration: 0.3,
-      });
-    } else {
-      gsap.to(followerRef.current, {
-        scale: 1,
-        borderColor: "rgba(255, 255, 255, 0.5)",
-        backgroundColor: "transparent",
-        duration: 0.3,
-      });
-    }
-  }, [isHovering]);
+  }, []);
 
   return (
-    <>
-      {/* Small Center Dot (Always Red) */}
+    // REMOVED mix-blend-difference. It destroys performance over 3D canvases.
+    <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
+      
+      {/* Main Outer Ring */}
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-2 h-2 bg-iron-red rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+        className="absolute left-0 top-0 w-10 h-10 -ml-5 -mt-5 rounded-full border border-iron-red/80 flex items-center justify-center"
+        // Force GPU rendering
+        style={{ willChange: "transform", transform: "translateZ(0)" }}
+      >
+        {/* Radar Crosshair marks */}
+        <div className="absolute top-[-4px] w-[1px] h-2 bg-iron-red" />
+        <div className="absolute bottom-[-4px] w-[1px] h-2 bg-iron-red" />
+        <div className="absolute left-[-4px] w-2 h-[1px] bg-iron-red" />
+        <div className="absolute right-[-4px] w-2 h-[1px] bg-iron-red" />
+      </div>
+
+      {/* Inner Dot */}
+      <div
+        ref={cursorDotRef}
+        className="absolute left-0 top-0 w-2 h-2 -ml-1 -mt-1 bg-white rounded-full shadow-[0_0_10px_#FF1F1F]"
+        style={{ willChange: "transform", transform: "translateZ(0)" }}
       />
       
-      {/* Large Follower Ring (Expands on Hover) */}
-      <div
-        ref={followerRef}
-        className="fixed top-0 left-0 w-8 h-8 border border-white/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-colors duration-300"
-      />
-    </>
+    </div>
   );
 };
 

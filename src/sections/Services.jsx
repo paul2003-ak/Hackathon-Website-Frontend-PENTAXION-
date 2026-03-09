@@ -19,7 +19,6 @@ mission-critical environments.`;
 
   // --- MOUSE TILT EFFECT (Desktop Only Logic in CSS/GSAP) ---
   const handleMouseMove = (e, index) => {
-    // Quick check to prevent running on mobile
     if (window.innerWidth < 1024) return;
     
     const card = serviceRefs.current[index];
@@ -52,14 +51,10 @@ mission-critical environments.`;
   useGSAP(() => {
     let mm = gsap.matchMedia();
 
-    // DESKTOP ANIMATIONS ONLY (min-width: 1024px)
     mm.add("(min-width: 1024px)", () => {
       serviceRefs.current.forEach((el, index) => {
         if (!el) return;
-        
         const nextCard = serviceRefs.current[index + 1];
-
-        // Only add blur effect if there is a next card
         if (nextCard) {
           gsap.to(el.querySelector(".service-content"), {
             filter: "blur(15px)", 
@@ -76,7 +71,6 @@ mission-critical environments.`;
       });
     });
 
-    // MOBILE CLEANUP (Ensure no blur remains)
     mm.add("(max-width: 1023px)", () => {
       gsap.set(".service-content", { filter: "blur(0px)", scale: 1 });
     });
@@ -84,19 +78,58 @@ mission-critical environments.`;
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} id="services" className="relative bg-line-dark pb-20 md:pb-40">
+    <section ref={containerRef} id="services" className="relative bg-line-dark pb-20 md:pb-40 pt-0">
       
+      {/* =========================================================
+          NEW: INFINITE SCROLLING MARQUEE BANNER
+      ========================================================= */}
+      <div className="relative z-30 w-full bg-iron-red py-3 overflow-hidden border-y border-iron-red shadow-[0_0_20px_rgba(255,31,31,0.4)] flex">
+         
+         <div className="flex whitespace-nowrap animate-marquee items-center">
+            {/* We repeat the array 20 times to ensure it fills any screen wide enough to scroll infinitely */}
+            {[...Array(20)].map((_, i) => (
+              <div key={i} className="flex items-center">
+                 <span className="mx-4 text-black font-black font-mono uppercase tracking-widest text-sm md:text-base">
+                    REGISTER NOW
+                 </span>
+                 <Icon icon="lucide:zap" className="text-black/50" />
+                 <span className="mx-4 text-white font-bold font-mono uppercase tracking-widest text-sm md:text-base">
+                    SEE YOU ON THE D-DAY !
+                 </span>
+                 <Icon icon="lucide:zap" className="text-black/50" />
+              </div>
+            ))}
+         </div>
+
+         {/* Raw CSS for the marquee animation so it works perfectly without Tailwind config changes */}
+         <style>{`
+           @keyframes marquee {
+             0% { transform: translateX(0); }
+             100% { transform: translateX(-50%); }
+           }
+           .animate-marquee {
+             animation: marquee 20s linear infinite;
+             width: max-content;
+           }
+         `}</style>
+      </div>
+
+
+      {/* Background grids */}
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-[2px] bg-iron-red/30 shadow-[0_0_20px_#FF1F1F] animate-scan-down pointer-events-none z-0" />
 
-      <AnimatedHeaderSection
-        subTitle={"SYSTEM CAPABILITIES"}
-        title={"PROTOCOL"}
-        text={text}
-        textColor={"text-white"}
-        accentColor={"text-iron-red"}
-        withScrollTrigger={true}
-      />
+      {/* Header section (Added pt-10 to push it down from the new banner) */}
+      <div className="pt-10">
+        <AnimatedHeaderSection
+          subTitle={"SYSTEM CAPABILITIES"}
+          title={"PROTOCOL"}
+          text={text}
+          textColor={"text-white"}
+          accentColor={"text-iron-red"}
+          withScrollTrigger={true}
+        />
+      </div>
 
       {/* Cards Container */}
       <div className="relative mt-10 md:mt-20 px-0 md:px-4 snap-y snap-mandatory">
@@ -106,8 +139,6 @@ mission-critical environments.`;
             key={index}
             onMouseMove={(e) => handleMouseMove(e, index)}
             onMouseLeave={() => handleMouseLeave(index)}
-            // CSS RESPONSIVE CLASSES (No JS Logic)
-            // Mobile: min-h-screen (auto height). Desktop: h-screen (sticky).
             className="w-full flex flex-col justify-center overflow-hidden border-t border-white/10 shadow-[0_-10px_60px_rgba(0,0,0,1)] relative z-10 bg-[#050505]
                        min-h-screen h-auto py-16 mb-8
                        md:sticky md:top-0 md:h-screen md:snap-start md:py-0 md:mb-0"
@@ -115,7 +146,6 @@ mission-critical environments.`;
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-iron-red to-transparent opacity-50" />
 
-            {/* Content Wrapper */}
             <div className="service-content w-full bg-[#050505] h-auto md:h-full md:will-change-transform">
                 
                 <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row gap-8 md:gap-20 items-center h-full md:pt-20">
@@ -141,8 +171,6 @@ mission-critical environments.`;
                         {service.items.map((item, itemIndex) => (
                           <div 
                             key={`item-${index}-${itemIndex}`} 
-                            // CSS RESPONSIVE CLASSES
-                            // Mobile: Red bg/border. Desktop: Transparent with Hover.
                             className="group flex items-center justify-between p-4 border transition-all duration-300 cursor-default rounded-sm
                                        bg-iron-red/5 border-iron-red/40
                                        md:bg-white/5 md:border-white/5 md:hover:bg-iron-red/10 md:hover:border-iron-red/50"
@@ -164,7 +192,7 @@ mission-critical environments.`;
                       </div>
                     </div>
 
-                    {/* RIGHT: 3D HOLO (Hidden on Mobile, Visible on Desktop) */}
+                    {/* RIGHT: 3D HOLO */}
                     <div className="hidden md:flex md:w-1/2 items-center justify-center relative perspective-1000 h-full max-h-[600px]">
                         <div className={`holo-container-${index} relative w-full h-full bg-black border border-iron-red/30 rounded-lg overflow-hidden shadow-[0_0_50px_rgba(255,31,31,0.1)] group`}>
                             <div className="absolute inset-0">
