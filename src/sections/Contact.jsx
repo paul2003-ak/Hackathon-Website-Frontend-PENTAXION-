@@ -10,23 +10,24 @@ import { Icon } from "@iconify/react";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- UPDATED DATA ---
+// --- UPDATED DATA ---
 const CONTACT_DATA = [
   {
     title: "DISCORD", 
     value: "Join the Server",
-    link: "https://discord.gg/jh8FenPj2Y", // <-- Put your actual Discord invite link here!
-    icon: "mdi:discord", // <-- THIS IS THE OFFICIAL DISCORD LOGO!
+    link: "https://discord.gg/jh8FenPj2Y", 
+    icon: "mdi:discord", 
   },
   {
-    title: "EMAIL",
-    value: "indiapentaverse@gmail.com",
-    link: "mailto:indiapentaverse@gmail.com",
-    icon: "lucide:mail",
+    title: "INSTAGRAM",
+    value: "Follow our Updates",
+    link: "https://www.instagram.com/pentaverse_india", // <-- Put your actual Instagram link here!
+    icon: "mdi:instagram", // <-- Official Instagram logo
   },
   {
     title: "WHATSAPP",
     value: "Chat on WhatsApp",
-    link: "https://wa.me/918583000996",
+    link: "https://chat.whatsapp.com/GZ23lIdarTUG5odT5lxsPo",
     icon: "lucide:message-circle",
   },
   {
