@@ -64,7 +64,11 @@ const HIGHLIGHTS_DATA = [
 const Tracks = () => {
   const overlayRefs = useRef([]);
   const previewRef = useRef(null);
+  
+  // State for Desktop Hover
   const [currentIndex, setCurrentIndex] = useState(null);
+  // NEW: State for Mobile Accordion
+  const [expandedIndex, setExpandedIndex] = useState(null);
   
   const moveX = useRef(null);
   const moveY = useRef(null);
@@ -107,9 +111,9 @@ const Tracks = () => {
     );
   }, []);
 
-  // --- Interaction Handlers (Desktop Only Logic) ---
+  // --- Interaction Handlers ---
   const handleMouseEnter = (index) => {
-    if (window.innerWidth < 768) return; // Keeps desktop logic isolated
+    if (window.innerWidth < 768) return;
     setCurrentIndex(index);
     const el = overlayRefs.current[index];
     if (el) {
@@ -119,7 +123,7 @@ const Tracks = () => {
   };
 
   const handleMouseLeave = (index) => {
-    if (window.innerWidth < 768) return; // Keeps desktop logic isolated
+    if (window.innerWidth < 768) return;
     const el = overlayRefs.current[index];
     if (el) {
       gsap.to(el, { clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)", duration: 0.3, ease: "power2.in" });
@@ -132,6 +136,13 @@ const Tracks = () => {
     if (window.innerWidth < 768) return;
     moveX.current(e.clientX + 30); 
     moveY.current(e.clientY + 30);
+  };
+
+  // --- NEW: Mobile Tap Handler ---
+  const handleMobileTap = (index) => {
+    if (window.innerWidth >= 768) return; // Ignore on desktop
+    // Toggle the clicked item. If it's already open, close it (set to null)
+    setExpandedIndex(expandedIndex === index ? null : index);
   };
 
   return (
@@ -160,36 +171,66 @@ Build the future.`}
               className="track-row relative flex flex-col gap-2 py-8 cursor-pointer group md:py-10 border-b border-white/10 overflow-hidden"
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={() => handleMouseLeave(index)}
+              onClick={() => handleMobileTap(index)} // Trigger mobile toggle on click
             >
-              {/* --- DESKTOP HOVER OVERLAY (Managed by GSAP) --- */}
+              {/* --- DESKTOP HOVER OVERLAY --- */}
               <div
                 ref={(el) => (overlayRefs.current[index] = el)}
                 className="absolute inset-0 bg-iron-red/10 pointer-events-none clip-path-tech"
                 style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)" }}
               />
 
-              {/* --- NEW: MOBILE HOVER/ACTIVE OVERLAY (CSS Only) --- */}
-              {/* Visible ONLY on mobile (md:hidden). Activates on Tap/Hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-iron-red/20 to-transparent opacity-0 group-active:opacity-100 group-hover:opacity-100 md:group-hover:opacity-0 transition-opacity duration-300 md:hidden pointer-events-none border-l-4 border-iron-red" />
+              {/* --- MOBILE ACTIVE OVERLAY --- */}
+              <div className={`absolute inset-0 bg-gradient-to-r from-iron-red/20 to-transparent transition-opacity duration-300 md:hidden pointer-events-none border-l-4 border-iron-red ${expandedIndex === index ? 'opacity-100' : 'opacity-0'}`} />
 
-
-              <div className="relative px-6 md:px-12 flex flex-col md:flex-row md:items-center justify-between z-10 transition-all duration-300">
-                <div className="flex flex-col gap-1">
-                  {/* Subtitle */}
-                  <span className="font-mono text-iron-red text-sm md:text-base opacity-60">
-                     // SECTOR_{track.id}
-                  </span>
-                  
-                  {/* Title (Glows on both Mobile and Desktop on interaction) */}
-                  <h2 className="text-3xl md:text-5xl font-black text-white uppercase group-hover:text-glow transition-all">
-                    {track.title}
-                  </h2>
-                </div>
+              <div className="relative px-6 md:px-12 flex flex-col z-10 w-full">
                 
-                {/* Desktop Arrow */}
-                <div className="hidden md:block text-white opacity-20 group-hover:opacity-100 group-hover:text-iron-red group-hover:translate-x-4 transition-all duration-300">
-                   <Icon icon="lucide:chevron-right" width="40" />
+                {/* Title Row */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between w-full pr-8 md:pr-0">
+                  <div className="flex flex-col gap-1">
+                    {/* Subtitle */}
+                    <span className="font-mono text-iron-red text-sm md:text-base opacity-60">
+                       // SECTOR_{track.id}
+                    </span>
+                    
+                    {/* Title */}
+                    <h2 className="text-3xl md:text-5xl font-black text-white uppercase group-hover:text-glow transition-all">
+                      {track.title}
+                    </h2>
+                  </div>
+                  
+                  {/* Desktop Hover Arrow */}
+                  <div className="hidden md:block text-white opacity-20 group-hover:opacity-100 group-hover:text-iron-red group-hover:translate-x-4 transition-all duration-300">
+                     <Icon icon="lucide:chevron-right" width="40" />
+                  </div>
                 </div>
+
+                {/* Mobile Expand Icon (Chevron) */}
+                <div className="md:hidden absolute right-6 top-1/2 -translate-y-1/2 text-iron-red transition-transform duration-300 pointer-events-none">
+                    <Icon 
+                        icon="lucide:chevron-down" 
+                        width="24" 
+                        className={`transition-transform duration-300 ${expandedIndex === index ? 'rotate-180' : 'rotate-0'}`}
+                    />
+                </div>
+
+                {/* --- NEW: MOBILE DROPDOWN DESCRIPTION --- */}
+                {/* Using CSS Grid trick for buttery smooth height animation */}
+                <div 
+                    className={`grid transition-all duration-300 ease-in-out md:hidden ${
+                        expandedIndex === index ? "grid-rows-[1fr] opacity-100 mt-4" : "grid-rows-[0fr] opacity-0 mt-0"
+                    }`}
+                >
+                    <div className="overflow-hidden flex flex-col gap-2 border-t border-iron-red/20 pt-4">
+                        <h4 className="font-mono text-iron-red text-xs tracking-widest">
+                            {track.subtitle}
+                        </h4>
+                        <p className="text-gray-300 text-sm leading-relaxed font-light pr-4">
+                            {track.description}
+                        </p>
+                    </div>
+                </div>
+
               </div>
             </div>
           ))}
@@ -223,6 +264,7 @@ Build the future.`}
       </div>
 
       {/* --- SECTION 2: HIGHLIGHTS --- */}
+      {/* ... keeping the highlights section unchanged below ... */}
       <div id="highlights-section" className="relative mt-32 px-6 md:px-12">
         <div className="flex items-center gap-4 mb-12">
            <div className="w-12 h-2 bg-iron-red shadow-[0_0_10px_#FF1F1F]" />

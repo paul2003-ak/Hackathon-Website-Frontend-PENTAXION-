@@ -17,7 +17,7 @@ import Contact from "./sections/Contact";
 // --- COMPONENTS ---
 import Preloader from "./components/Preloader";
 import CustomCursor from "./components/CustomCursor"; 
-import Sponsors from "./sections/Sponser";
+// import Sponsors from "./sections/Sponser";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,7 +68,7 @@ const App = () => {
         {/* If you wanted to KEEP ServiceSummary, just add it back here: <ServiceSummary /> */}
         <Services /> 
         <Pricing />
-        <Sponsors /> 
+        {/* <Sponsors />  */}
         <About />
         <Works />
         <Contact />

@@ -150,9 +150,7 @@ We believe in technology as a tool not just for progress, but for purpose.`;
                 </div>
 
                 {/* Subtext Badge for 30-20-10 split */}
-                <div className="relative z-10 font-mono text-[10px] md:text-xs font-bold text-gray-400 border border-white/20 bg-black/50 px-3 py-1.5 rounded-sm">
-                  ( 30 - 20 - 10 )
-                </div>
+                
               </div>
 
            </div>

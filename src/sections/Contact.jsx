@@ -9,13 +9,13 @@ import { Icon } from "@iconify/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Data from your reference image
+// --- UPDATED DATA ---
 const CONTACT_DATA = [
   {
-    title: "PHONE",
-    value: "+91 85830 00996",
-    link: "tel:+918583000996",
-    icon: "lucide:phone",
+    title: "DISCORD", 
+    value: "Join the Server",
+    link: "https://discord.gg/jh8FenPj2Y", // <-- Put your actual Discord invite link here!
+    icon: "mdi:discord", // <-- THIS IS THE OFFICIAL DISCORD LOGO!
   },
   {
     title: "EMAIL",
@@ -32,7 +32,7 @@ const CONTACT_DATA = [
   {
     title: "LINKEDIN",
     value: "pentaverse-india",
-    link: "https://linkedin.com/in/pentaverse-india",
+    link: "https://www.linkedin.com/company/pentaverse-india/posts/?feedView=all",
     icon: "lucide:linkedin",
   },
 ];
@@ -51,7 +51,6 @@ const HoloCore = () => {
       <mesh ref={meshRef} scale={2.4}>
         <sphereGeometry args={[1, 64, 64]} />
         <MeshDistortMaterial
-          // Updated to Iron Red
           color="#FF1F1F" 
           envMapIntensity={1}
           clearcoat={1}
@@ -108,7 +107,6 @@ const Contact = () => {
 Got a question or a project idea? 
 We'd love to hear from you.`}
           textColor={"text-white"}
-          // Updated Accent to Red
           accentColor={"text-iron-red"}
           withScrollTrigger={false}
         />
@@ -126,20 +124,18 @@ We'd love to hear from you.`}
             
             <Canvas camera={{ position: [0, 0, 5] }}>
                 <ambientLight intensity={0.5} />
-                {/* Point Light Red */}
                 <pointLight position={[10, 10, 10]} intensity={1.5} color="#FF1F1F" />
                 <Environment preset="city" />
                 <HoloCore />
             </Canvas>
           </div>
 
-          {/* ADDED: QR Code Section */}
+          {/* QR Code Section */}
           <div className="mt-4 bg-white/5 border border-iron-red/30 p-4 rounded-xl backdrop-blur-md flex flex-col items-center text-center max-w-xs animate-pulse hover:animate-none transition-all">
                <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-2">Join Bengal Chapter</h4>
                <p className="text-[10px] text-gray-400 font-mono mb-3">Scan for Official Groups</p>
                
                <div className="bg-white p-2 rounded-lg mb-3">
-                   {/* Put QR image in public/assets/qr.png */}
                    <img src="/assets/qr.png" alt="Bengal Chapter QR" className="w-32 h-32 object-contain" />
                </div>
                
@@ -161,7 +157,6 @@ We'd love to hear from you.`}
                 href={item.link}
                 target="_blank"
                 rel="noreferrer"
-                // Updated Hover Border and Shadow to Red
                 className="contact-card group relative bg-line-gray/80 backdrop-blur-sm border border-white/20 rounded-lg overflow-hidden hover:border-iron-red transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,31,31,0.2)]"
               >
                 {/* Browser Window Header Bar */}
@@ -173,7 +168,6 @@ We'd love to hear from you.`}
 
                 {/* Card Content */}
                 <div className="p-6 flex flex-col items-center text-center gap-4">
-                  {/* Updated Icon Colors to Red */}
                   <div className="w-12 h-12 rounded-full bg-iron-red/10 flex items-center justify-center text-iron-red group-hover:bg-iron-red group-hover:text-black transition-colors duration-300">
                      <Icon icon={item.icon} width="24" />
                   </div>

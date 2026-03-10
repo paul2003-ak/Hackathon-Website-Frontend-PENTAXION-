@@ -89,12 +89,12 @@ mission-critical environments.`;
             {/* We repeat the array 20 times to ensure it fills any screen wide enough to scroll infinitely */}
             {[...Array(20)].map((_, i) => (
               <div key={i} className="flex items-center">
-                 <span className="mx-4 text-black font-black font-mono uppercase tracking-widest text-sm md:text-base">
+                 {/* <span className="mx-4 text-black font-black font-mono uppercase tracking-widest text-sm md:text-base">
                     REGISTER NOW
-                 </span>
-                 <Icon icon="lucide:zap" className="text-black/50" />
+                 </span> */}
+                 {/* <Icon icon="lucide:zap" className="text-black/50" /> */}
                  <span className="mx-4 text-white font-bold font-mono uppercase tracking-widest text-sm md:text-base">
-                    SEE YOU ON THE D-DAY !
+                    COMING SOON
                  </span>
                  <Icon icon="lucide:zap" className="text-black/50" />
               </div>

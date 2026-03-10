@@ -96,7 +96,7 @@ connected experiences.`;
                 
                 <div className="relative flex items-center justify-center gap-2 skew-x-[10deg] z-10">
                     <Icon icon="lucide:zap" className="w-4 h-4 md:w-5 md:h-5 text-black group-hover:text-iron-red transition-colors" />
-                    <span>REGISTER NOW</span>
+                    <span>Coming Soon</span>
                 </div>
                 
                 {/* Stark Tech Corner Accents (Black) */}
