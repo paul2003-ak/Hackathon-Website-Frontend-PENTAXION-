@@ -17,7 +17,6 @@ const PRIZE_DATA = [
       { text: "Silver Certificate", icon: "lucide:award" },
       { text: "Runner-Up Trophy", icon: "lucide:trophy" },
       { text: "Event Swag Kit", icon: "lucide:gift" },
-      { text: "Internship Opportunity", icon: "lucide:briefcase" }
     ],
     highlight: false,
   },
@@ -30,8 +29,6 @@ const PRIZE_DATA = [
       { text: "Gold Certificate of Excellence", icon: "lucide:award" },
       { text: "Championship Trophy", icon: "lucide:trophy" },
       { text: "Premium Swags", icon: "lucide:package-open" },
-      { text: "Investor Pitch Access", icon: "lucide:presentation" },
-      { text: "Incubation Support", icon: "lucide:rocket" }
     ],
     highlight: true, 
   },
@@ -43,8 +40,7 @@ const PRIZE_DATA = [
     perks: [
       { text: "Bronze Certificate", icon: "lucide:award" },
       { text: "Excellence Trophy", icon: "lucide:trophy" },
-      { text: "Event Swag Kit", icon: "lucide:gift" },
-      { text: "Mentorship Session", icon: "lucide:users" }
+      { text: "Event Swag Kit", icon: "lucide:gift" }
     ],
     highlight: false,
   },

@@ -106,7 +106,7 @@ const Navbar = () => {
            
            {/* Logo Image Container */}
            <div className="relative w-15 h-15 overflow-hidden rounded-md border border-white/20 group-hover:border-iron-red transition-all duration-300 bg-black/40 backdrop-blur-md z-10">
-              <img src="/assets/logo.jpg" alt="Pentaverse Logo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+              <img src="/assets/pentexion.PNG" alt="Pentaverse Logo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
               {/* Shine Effect */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
            </div>
