@@ -55,7 +55,7 @@ const TRACKS_DATA = [
 const HIGHLIGHTS_DATA = [
   { title: "36 Hours of Innovation", desc: "Collaborate, code, and create revolutionary prototypes." },
   { title: "Mentorship Rounds", desc: "Learn directly from industry professionals & community experts." },
-  { title: "Tech Expo Zone", desc: "Showcase your prototype to developers, judges, and recruiters." },
+  { title: "Tech Expo Zone", desc: "Showcase your prototype to developers, judges." },
   { title: "Mini Challenges", desc: "Surprise problem statements testing creativity and technical agility." },
   { title: "Innovation Awards", desc: "Recognition for best project, UI/UX design, sustainability impact & more." },
   { title: "Pitch Arena", desc: "Finalists present to a panel of innovators, entrepreneurs, and leaders." }

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { socials } from "../constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Link } from "react-scroll";
@@ -192,22 +191,7 @@ const Navbar = () => {
               </a>
             </div>
 
-            {/* Socials Block */}
-            <div className="font-mono">
-              <p className="text-xs text-iron-red mb-2">[ NETWORK_NODES ]</p>
-              <div className="flex flex-wrap gap-4">
-                {socials.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    // Updated Hover Colors to Red
-                    className="text-xs px-3 py-1 border border-white/20 text-gray-400 hover:text-black hover:bg-iron-red hover:border-iron-red transition-all uppercase"
-                  >
-                    {social.name}
-                  </a>
-                ))}
-              </div>
-            </div>
+          
 
           </div>
         </div>

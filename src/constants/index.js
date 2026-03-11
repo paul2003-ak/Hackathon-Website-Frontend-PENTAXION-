@@ -78,12 +78,3 @@ export const servicesData = [
   },
 ];
 
-export const socials = [
-  { name: "Instagram", href: "" },
-  {
-    name: "Youtube",
-    href: "",
-  },
-  { name: "LinkedIn", href: "https://www.linkedin.com/in/ayan-paul-384396294/" },
-  { name: "GitHub", href: "https://github.com/paul2003-ak" },
-];

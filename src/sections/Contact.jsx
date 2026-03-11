@@ -133,7 +133,7 @@ We'd love to hear from you.`}
 
           {/* QR Code Section */}
           <div className="mt-4 bg-white/5 border border-iron-red/30 p-4 rounded-xl backdrop-blur-md flex flex-col items-center text-center max-w-xs animate-pulse hover:animate-none transition-all">
-               <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-2">Join Bengal Chapter</h4>
+               <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-2">Join US</h4>
                <p className="text-[10px] text-gray-400 font-mono mb-3">Scan for Official Groups</p>
                
                <div className="bg-white p-2 rounded-lg mb-3">
