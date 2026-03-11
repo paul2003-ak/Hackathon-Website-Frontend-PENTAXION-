@@ -18,6 +18,7 @@ import Contact from "./sections/Contact";
 import Preloader from "./components/Preloader";
 import CustomCursor from "./components/CustomCursor"; 
 import Sponsors from "./sections/Sponser";
+import ChatBot from "./components/ChatBot";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,6 +73,8 @@ const App = () => {
         <About />
         <Works />
         <Contact />
+
+        <ChatBot/>
       </div>
       
     </ReactLenis>
