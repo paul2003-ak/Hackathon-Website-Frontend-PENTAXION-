@@ -81,18 +81,13 @@ mission-critical environments.`;
     <section ref={containerRef} id="services" className="relative bg-line-dark pb-20 md:pb-40 pt-0">
       
       {/* =========================================================
-          NEW: INFINITE SCROLLING MARQUEE BANNER
+          INFINITE SCROLLING MARQUEE BANNER
       ========================================================= */}
       <div className="relative z-30 w-full bg-iron-red py-3 overflow-hidden border-y border-iron-red shadow-[0_0_20px_rgba(255,31,31,0.4)] flex">
          
          <div className="flex whitespace-nowrap animate-marquee items-center">
-            {/* We repeat the array 20 times to ensure it fills any screen wide enough to scroll infinitely */}
             {[...Array(20)].map((_, i) => (
               <div key={i} className="flex items-center">
-                 {/* <span className="mx-4 text-black font-black font-mono uppercase tracking-widest text-sm md:text-base">
-                    REGISTER NOW
-                 </span> */}
-                 {/* <Icon icon="lucide:zap" className="text-black/50" /> */}
                  <span className="mx-4 text-white font-bold font-mono uppercase tracking-widest text-sm md:text-base">
                     COMING SOON
                  </span>
@@ -101,7 +96,6 @@ mission-critical environments.`;
             ))}
          </div>
 
-         {/* Raw CSS for the marquee animation so it works perfectly without Tailwind config changes */}
          <style>{`
            @keyframes marquee {
              0% { transform: translateX(0); }
@@ -119,7 +113,7 @@ mission-critical environments.`;
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-[2px] bg-iron-red/30 shadow-[0_0_20px_#FF1F1F] animate-scan-down pointer-events-none z-0" />
 
-      {/* Header section (Added pt-10 to push it down from the new banner) */}
+      {/* Header section */}
       <div className="pt-10">
         <AnimatedHeaderSection
           subTitle={"SYSTEM CAPABILITIES"}
@@ -167,26 +161,41 @@ mission-critical environments.`;
                           </p>
                        </div>
                       
+                      {/* =========================================================
+                          UPDATED: ACCORDION LIST ITEMS
+                      ========================================================= */}
                       <div className="flex flex-col gap-2 pb-10 md:pb-0">
                         {service.items.map((item, itemIndex) => (
                           <div 
                             key={`item-${index}-${itemIndex}`} 
-                            className="group flex items-center justify-between p-4 border transition-all duration-300 cursor-default rounded-sm
+                            className="group flex flex-col justify-center p-4 border transition-all duration-300 cursor-default rounded-sm
                                        bg-iron-red/5 border-iron-red/40
                                        md:bg-white/5 md:border-white/5 md:hover:bg-iron-red/10 md:hover:border-iron-red/50"
                           >
-                            <div className="flex items-center gap-4">
-                                <span className="font-mono text-xs text-iron-red md:text-iron-red md:opacity-50 md:group-hover:opacity-100">
-                                    0{itemIndex+1}
-                                </span>
-                                <h3 className="text-base md:text-xl font-bold uppercase tracking-tight transition-colors text-white md:group-hover:text-iron-red">
-                                  {item.title}
-                                </h3>
+                            {/* TOP ROW: Number, Title, and Chevron */}
+                            <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-4">
+                                    <span className="font-mono text-xs text-iron-red md:text-iron-red md:opacity-50 md:group-hover:opacity-100">
+                                        0{itemIndex+1}
+                                    </span>
+                                    <h3 className="text-base md:text-xl font-bold uppercase tracking-tight transition-colors text-white md:group-hover:text-iron-red">
+                                      {item.title}
+                                    </h3>
+                                </div>
+                                <Icon 
+                                    icon="lucide:chevron-right" 
+                                    className="transition-transform duration-300 text-iron-red md:text-white/20 md:group-hover:text-iron-red md:group-hover:rotate-90" 
+                                />
                             </div>
-                            <Icon 
-                                icon="lucide:chevron-right" 
-                                className="transition-all text-iron-red md:text-white/20 md:group-hover:text-iron-red md:group-hover:translate-x-1" 
-                            />
+
+                            {/* HIDDEN DROPDOWN: The Description */}
+                            <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
+                                <div className="overflow-hidden">
+                                    <p className="text-sm md:text-base text-gray-400 font-mono pl-8 pt-4 border-l-2 border-iron-red/30 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </div>
                           </div>
                         ))}
                       </div>

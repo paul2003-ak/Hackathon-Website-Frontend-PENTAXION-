@@ -103,14 +103,21 @@ const Pricing = () => {
             </div>
         </h2>
 
-        {/* Total Prize Pool */}
-        <div className="inline-flex items-center gap-4 border border-iron-red bg-[#1a0505] px-6 py-3 shadow-[0_0_20px_rgba(255,31,31,0.3)] relative overflow-hidden group">
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
-            <Icon icon="lucide:banknote" className="text-iron-red text-2xl md:text-3xl animate-pulse" />
-            <div className="flex flex-col text-left relative z-10">
-                <span className="text-[10px] font-mono text-iron-red tracking-[0.2em] leading-none mb-1">TOTAL_BOUNTY_POOL</span>
-                <span className="text-2xl md:text-3xl font-black text-white leading-none">₹60,000</span>
-            </div>
+        {/* Total Prize Pool Container */}
+        <div className="flex flex-col items-center">
+          <div className="inline-flex items-center gap-4 border border-iron-red bg-[#1a0505] px-6 py-3 shadow-[0_0_20px_rgba(255,31,31,0.3)] relative overflow-hidden group">
+              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
+              <Icon icon="lucide:banknote" className="text-iron-red text-2xl md:text-3xl animate-pulse" />
+              <div className="flex flex-col text-left relative z-10">
+                  <span className="text-[10px] font-mono text-iron-red tracking-[0.2em] leading-none mb-1">TOTAL_BOUNTY_POOL</span>
+                  <span className="text-2xl md:text-3xl font-black text-white leading-none">₹60,000</span>
+              </div>
+          </div>
+          
+          {/* THE NEW DISCLAIMER */}
+          <p className="mt-3 text-[10px] md:text-xs font-mono text-white/40 tracking-widest uppercase">
+            * Prize pool depends on the sponsors
+          </p>
         </div>
 
       </div>
@@ -125,7 +132,6 @@ const Pricing = () => {
               className={`prize-card relative flex flex-col p-8 rounded-2xl border transition-all duration-500 group
                 ${item.highlight 
                   ? "bg-iron-red/10 border-iron-red scale-100 md:scale-110 shadow-[0_0_30px_rgba(255,31,31,0.25)] z-20 order-first md:order-none" 
-                  // UPGRADE: Added full hover glow and scale effect for 2nd and 3rd place
                   : "bg-[#0a0a0a] border-white/10 hover:border-iron-red hover:bg-iron-red/10 hover:shadow-[0_0_30px_rgba(255,31,31,0.25)] hover:scale-[1.02] hover:z-30 z-10"
                 }
               `}
@@ -134,7 +140,6 @@ const Pricing = () => {
               <div className={`absolute -top-5 left-1/2 -translate-x-1/2 py-2 px-6 font-black font-mono text-sm tracking-widest uppercase rounded-sm shadow-lg whitespace-nowrap transition-all duration-300
                 ${item.highlight 
                   ? "bg-iron-red text-black shadow-[0_0_20px_#FF1F1F]" 
-                  // UPGRADE: Badge turns red and glows on hover
                   : "bg-gray-800 text-gray-400 border border-white/20 group-hover:bg-iron-red group-hover:text-black group-hover:shadow-[0_0_20px_#FF1F1F] group-hover:border-iron-red"
                 }
               `}>
@@ -145,7 +150,6 @@ const Pricing = () => {
               <div className="mt-6 mb-8 border-b border-white/10 pb-6 text-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-gray-300 uppercase tracking-tighter mb-2 group-hover:text-white transition-colors">{item.title}</h3>
                 
-                {/* UPGRADE: Prize Text turns glowing red on hover */}
                 <div className={`text-4xl md:text-6xl font-black mt-4 transition-all duration-300 
                   ${item.highlight ? 'text-iron-red text-glow' : 'text-white group-hover:text-iron-red group-hover:text-glow'}
                 `}>
@@ -170,7 +174,6 @@ const Pricing = () => {
               <div className={`w-full py-4 text-center font-mono font-bold text-[10px] md:text-xs tracking-widest uppercase border-t transition-colors duration-300 
                 ${item.highlight 
                   ? 'border-iron-red text-iron-red' 
-                  // UPGRADE: Status text and border turn red on hover
                   : 'border-white/10 text-gray-500 group-hover:border-iron-red group-hover:text-iron-red'
                 }
               `}>
