@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import HackerText from "../components/HackerText";
 import { servicesData } from "../constants";
@@ -16,6 +16,14 @@ mission-critical environments.`;
   
   const containerRef = useRef(null);
   const serviceRefs = useRef([]);
+  
+  // NEW: State to track which accordion item is currently open
+  const [openItemId, setOpenItemId] = useState(null);
+
+  // NEW: Toggle function for mobile taps and desktop clicks
+  const toggleItem = (id) => {
+    setOpenItemId((prev) => (prev === id ? null : id));
+  };
 
   // --- MOUSE TILT EFFECT (Desktop Only Logic in CSS/GSAP) ---
   const handleMouseMove = (e, index) => {
@@ -108,7 +116,6 @@ mission-critical environments.`;
          `}</style>
       </div>
 
-
       {/* Background grids */}
       <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-[2px] bg-iron-red/30 shadow-[0_0_20px_#FF1F1F] animate-scan-down pointer-events-none z-0" />
@@ -162,42 +169,50 @@ mission-critical environments.`;
                        </div>
                       
                       {/* =========================================================
-                          UPDATED: ACCORDION LIST ITEMS
+                          MOBILE-FRIENDLY ACCORDION (Click/Tap based)
                       ========================================================= */}
                       <div className="flex flex-col gap-2 pb-10 md:pb-0">
-                        {service.items.map((item, itemIndex) => (
-                          <div 
-                            key={`item-${index}-${itemIndex}`} 
-                            className="group flex flex-col justify-center p-4 border transition-all duration-300 cursor-default rounded-sm
-                                       bg-iron-red/5 border-iron-red/40
-                                       md:bg-white/5 md:border-white/5 md:hover:bg-iron-red/10 md:hover:border-iron-red/50"
-                          >
-                            {/* TOP ROW: Number, Title, and Chevron */}
-                            <div className="flex items-center justify-between w-full">
-                                <div className="flex items-center gap-4">
-                                    <span className="font-mono text-xs text-iron-red md:text-iron-red md:opacity-50 md:group-hover:opacity-100">
-                                        0{itemIndex+1}
-                                    </span>
-                                    <h3 className="text-base md:text-xl font-bold uppercase tracking-tight transition-colors text-white md:group-hover:text-iron-red">
-                                      {item.title}
-                                    </h3>
-                                </div>
-                                <Icon 
-                                    icon="lucide:chevron-right" 
-                                    className="transition-transform duration-300 text-iron-red md:text-white/20 md:group-hover:text-iron-red md:group-hover:rotate-90" 
-                                />
-                            </div>
+                        {service.items.map((item, itemIndex) => {
+                          const currentId = `${index}-${itemIndex}`;
+                          const isOpen = openItemId === currentId;
 
-                            {/* HIDDEN DROPDOWN: The Description */}
-                            <div className="grid grid-rows-[0fr] transition-all duration-300 ease-in-out group-hover:grid-rows-[1fr]">
-                                <div className="overflow-hidden">
-                                    <p className="text-sm md:text-base text-gray-400 font-mono pl-8 pt-4 border-l-2 border-iron-red/30 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-                                        {item.description}
-                                    </p>
-                                </div>
+                          return (
+                            <div 
+                              key={currentId}
+                              onClick={() => toggleItem(currentId)}
+                              className={`group flex flex-col justify-center p-4 border transition-all duration-300 cursor-pointer rounded-sm
+                                         ${isOpen 
+                                            ? 'bg-iron-red/10 border-iron-red/50' 
+                                            : 'bg-iron-red/5 border-iron-red/40 md:bg-white/5 md:border-white/5 md:hover:bg-iron-red/10 md:hover:border-iron-red/50'
+                                         }`}
+                            >
+                              {/* TOP ROW: Number, Title, and Chevron */}
+                              <div className="flex items-center justify-between w-full">
+                                  <div className="flex items-center gap-4">
+                                      <span className={`font-mono text-xs transition-opacity duration-300 ${isOpen ? 'text-iron-red opacity-100' : 'text-iron-red md:opacity-50 md:group-hover:opacity-100'}`}>
+                                          0{itemIndex+1}
+                                      </span>
+                                      <h3 className={`text-base md:text-xl font-bold uppercase tracking-tight transition-colors ${isOpen ? 'text-iron-red' : 'text-white md:group-hover:text-iron-red'}`}>
+                                        {item.title}
+                                      </h3>
+                                  </div>
+                                  <Icon 
+                                      icon="lucide:chevron-right" 
+                                      className={`transition-transform duration-300 ${isOpen ? 'rotate-90 text-iron-red' : 'text-iron-red md:text-white/20 md:group-hover:text-iron-red'}`} 
+                                  />
+                              </div>
+
+                              {/* HIDDEN DROPDOWN: The Description */}
+                              <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                                  <div className="overflow-hidden">
+                                      <p className={`text-sm md:text-base text-gray-400 font-mono pl-8 pt-4 border-l-2 border-iron-red/30 mt-2 transition-opacity duration-300 delay-75 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                                          {item.description}
+                                      </p>
+                                  </div>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
 
@@ -209,9 +224,7 @@ mission-critical environments.`;
                                     src={service.img || "/assets/ironman.jpg"} 
                                     alt="Schematic"
                                     className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110"
-                                    style={{
-                                        filter: "grayscale(100%) contrast(1.2) brightness(0.8)",
-                                    }}
+                                    style={{ filter: "grayscale(100%) contrast(1.2) brightness(0.8)" }}
                                 />
                                 <div className="absolute inset-0 bg-iron-red/20 mix-blend-multiply" />
                             </div>
