@@ -19,7 +19,7 @@ export const servicesData = [
     ],
   },
   {
-    title: "The Delivery & Submissions",
+    title: "The Delivery (Submissions)",
     description: "Your team must have between 1 and 4 members. Teams can edit or update their submissions anytime before the deadline.",
     items: [
       {
@@ -41,27 +41,23 @@ export const servicesData = [
     description: "Projects are evaluated across five categories, each scored out of 5 points for a 25 points total.",
     items: [
       {
-        title: "Innovation & Complexity",
-        description: "Judges look for fresh approaches to existing problems and strong engineering effort with advanced technologies.",
+        title: "Innovation & Impact",
+        description: "Is your idea unique and does it solve a real problem? Judges are looking for fresh, out-of-the-box solutions that have practical, real-world applications.",
       },
       {
-        title: "Design & Impact",
-        description: "Evaluated on overall UI/UX quality, ease of use, and whether the project has practical value and real-world applications.",
+        title: "Execution & Usability",
+        description: "How challenging is the build and how intuitive is the product? We evaluate the technical complexity, use of advanced technologies, and the overall UI/UX design quality."
       },
       {
         title: "Presentation",
-        description: "Scores are based on presentation clarity, live demo quality, and team communication.",
-      },
+        description: "How well can you explain your vision? Scores are based on the clarity of your explanation, the quality of your live demo, and your team's communication skills."
+      }
     ],
   },
   {
-    title: "The Final Round & Golden Rules",
+    title: "Golden Rules (Code of Conduct)",
     description: "We aim to create a positive, respectful, and inclusive environment for all participants.",
     items: [
-      {
-        title: "The Final Pitch",
-        description: "The top 5 teams advance to the final pitch. Finalists get exactly 5 minutes to present, followed by 2 minutes of Q&A.",
-      },
       {
         title: "Code of Conduct",
         description: "Treat fellow hackers, mentors, and organizers with respect. Collaborate fairly and ethically.",
@@ -69,6 +65,24 @@ export const servicesData = [
       {
         title: "Disqualification",
         description: "Plagiarism, harassment, discrimination, or violation of hackathon rules will lead to disqualification.",
+      },
+    ],
+  },
+  {
+    title: "Hacker Mission Kit",
+    description: "Before entering the 36-hour innovation cycle, ensure your loadout is ready.",
+    items: [
+      {
+        title: "Things to Bring",
+        description: "Laptop & Charger, Phone & Charger / Power Bank, Power Strip / Extension Cord, Headphones / Earphones, Mouse / External Keyboard, Jacket or Hoodie, Reusable Water Bottle, Light Snacks, Government-Issued ID, College-Issued ID, Toiletries (Toothbrush, toothpaste, deodorant, etc.), Fresh Gear (A clean change of clothes), Rest Equipment (A sleeping bag or warm blanket), Sleep Aids (Eye mask and earplugs), Personal Medications."
+      },
+      {
+        title: "Stark Facility Support",
+        description: "High-Speed Wi-Fi & Power Outlets, Meals, Snacks & Beverages, Hackathon Swag, Mentorship, First Aid, Notepads & Pens, Rest Zones."
+      },
+      {
+        title: "Restricted Items",
+        description: "Weapons & Sharp Objects (Knives, long-blade scissors, etc.), Fire Hazards (Lighters, matches, spray paint, or aerosols), Alcohol or recreational drugs, Bulky Gear (Large or heavy equipment), Offensive clothing or materials."
       },
     ],
   },
