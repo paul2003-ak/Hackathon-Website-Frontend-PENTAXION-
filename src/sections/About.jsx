@@ -153,6 +153,18 @@ We believe in technology as a tool not just for progress, but for purpose.`;
                 
               </div>
 
+              <div className="col-span-2 p-5 border border-iron-red bg-iron-red/10 shadow-[0_0_15px_rgba(255,31,31,0.2)] flex items-center justify-between group overflow-hidden relative">
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
+                
+                 <div className="relative z-10">
+                  <p className="text-3xl md:text-5xl font-black text-iron-red text-glow">1 to 4</p>
+                  <p className="font-mono text-[10px] md:text-xs text-white mt-1 uppercase tracking-widest">Team Size</p>
+                </div>
+
+                {/* Subtext Badge for 30-20-10 split */}
+                
+              </div>
+
            </div>
         </div>
 

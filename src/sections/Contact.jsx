@@ -10,7 +10,6 @@ import { Icon } from "@iconify/react";
 gsap.registerPlugin(ScrollTrigger);
 
 // --- UPDATED DATA ---
-// --- UPDATED DATA ---
 const CONTACT_DATA = [
   {
     title: "DISCORD", 
@@ -21,8 +20,8 @@ const CONTACT_DATA = [
   {
     title: "INSTAGRAM",
     value: "Follow our Updates",
-    link: "https://www.instagram.com/pentaverse_india", // <-- Put your actual Instagram link here!
-    icon: "mdi:instagram", // <-- Official Instagram logo
+    link: "https://www.instagram.com/pentaverse_india", 
+    icon: "mdi:instagram", 
   },
   {
     title: "WHATSAPP",
@@ -94,7 +93,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <section id="contact" className="relative min-h-screen bg-line-dark overflow-hidden flex flex-col pt-16 pb-10">
+    <section id="contact" className="relative min-h-screen bg-line-dark overflow-hidden flex flex-col pt-16">
       
       {/* Background Tech Mesh */}
       <div className="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none" />
@@ -146,7 +145,6 @@ We'd love to hear from you.`}
           </div>
         </div>
 
-
         {/* --- RIGHT: 2x2 GRID --- */}
         <div className="w-full lg:w-1/2 px-6 md:px-12 flex flex-col justify-center pb-20 lg:pb-0 mt-10 lg:mt-0">
           
@@ -187,6 +185,43 @@ We'd love to hear from you.`}
           </div>
         </div>
       </div>
+
+      {/* =========================================================
+          SYSTEM ENGINEER SIGNATURE (MADE BY AYAN KUMAR PAUL)
+      ========================================================= */}
+      <div className="w-full border-t border-white/10 mt-10 lg:mt-20 pt-8 pb-8 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 pl-6 pr-6 md:pl-12 md:pr-32 lg:pr-40 relative z-20 bg-[#050505]">
+        
+        {/* Left Side: The Flex */}
+        <div className="flex items-center gap-2 font-mono text-xs md:text-sm text-gray-500 tracking-widest uppercase">
+          <Icon icon="lucide:cpu" className="text-iron-red/50 animate-pulse" />
+          <span>System Engineered By //</span>
+          <a 
+            href="https://www.linkedin.com/in/your-profile" 
+            target="_blank" 
+            rel="noreferrer"
+            className="text-gray-200 font-bold tracking-[0.2em] group relative cursor-pointer hover:text-white transition-colors"
+          >
+            AYAN KUMAR PAUL
+            {/* Glowing red underline effect on hover */}
+            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-iron-red transition-all duration-300 group-hover:w-full shadow-[0_0_10px_#FF1F1F]"></span>
+          </a>
+        </div>
+
+        {/* Right Side: Your Socials */}
+        <div className="flex items-center gap-5">
+          <a href="https://github.com/paul2003-ak" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
+            <Icon icon="mdi:github" className="text-xl md:text-2xl" />
+          </a>
+          <a href="https://www.linkedin.com/in/ayan-paul-384396294/" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
+            <Icon icon="mdi:linkedin" className="text-xl md:text-2xl" />
+          </a>
+          <a href="https://www.instagram.com/a.k_paul_/" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
+            <Icon icon="mdi:instagram" className="text-xl md:text-2xl" />
+          </a>
+        </div>
+        
+      </div>
+
     </section>
   );
 };

@@ -20,6 +20,8 @@ import CustomCursor from "./components/CustomCursor";
 import Sponsors from "./sections/Sponser";
 import ChatBot from "./components/ChatBot";
 import Mentor from "./sections/Mentor";
+import Community from "./sections/Community";
+import CoreTeam from "./sections/CoreTeam";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,8 +73,10 @@ const App = () => {
         <Services /> 
         <About />
         <Pricing />
+        <CoreTeam/>
         <Mentor/>
         <Sponsors /> 
+        <Community/>
         
         <Works />
         <Contact />
