@@ -194,7 +194,8 @@ We'd love to hear from you.`}
         {/* Left Side: The Flex */}
         <div className="flex items-center gap-2 font-mono text-xs md:text-sm text-gray-500 tracking-widest uppercase">
           <Icon icon="lucide:cpu" className="text-iron-red/50 animate-pulse" />
-          <span>System Engineered By //</span>
+          <span>All credits are reserved to Pentaverse India
+System Engineered by  //</span>
           <a 
             
             className="text-gray-200 font-bold tracking-[0.2em] group relative cursor-pointer hover:text-white transition-colors"
@@ -203,18 +204,8 @@ We'd love to hear from you.`}
             {/* Glowing red underline effect on hover */}
             <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-iron-red transition-all duration-300 group-hover:w-full shadow-[0_0_10px_#FF1F1F]"></span>
           </a>
-        </div>
-
-        {/* Right Side: Your Socials */}
-        <div className="flex items-center gap-5">
-          <a href="https://github.com/paul2003-ak" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
-            <Icon icon="mdi:github" className="text-xl md:text-2xl" />
-          </a>
           <a href="https://www.linkedin.com/in/ayan-paul-384396294/" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
             <Icon icon="mdi:linkedin" className="text-xl md:text-2xl" />
-          </a>
-          <a href="https://www.instagram.com/a.k_paul_/" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-iron-red hover:drop-shadow-[0_0_10px_#FF1F1F] hover:-translate-y-1 transition-all duration-300">
-            <Icon icon="mdi:instagram" className="text-xl md:text-2xl" />
           </a>
         </div>
         
