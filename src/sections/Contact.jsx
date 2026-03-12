@@ -196,9 +196,7 @@ We'd love to hear from you.`}
           <Icon icon="lucide:cpu" className="text-iron-red/50 animate-pulse" />
           <span>System Engineered By //</span>
           <a 
-            href="https://www.linkedin.com/in/your-profile" 
-            target="_blank" 
-            rel="noreferrer"
+            
             className="text-gray-200 font-bold tracking-[0.2em] group relative cursor-pointer hover:text-white transition-colors"
           >
             AYAN KUMAR PAUL

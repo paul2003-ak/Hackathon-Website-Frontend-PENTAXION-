@@ -157,7 +157,7 @@ We believe in technology as a tool not just for progress, but for purpose.`;
                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-iron-red/20 to-transparent -translate-x-full group-hover:animate-[scan_2s_ease-in-out_infinite]" />
                 
                  <div className="relative z-10">
-                  <p className="text-3xl md:text-5xl font-black text-iron-red text-glow">1 to 4</p>
+                  <p className="text-3xl md:text-5xl font-black text-iron-red text-glow">1 - 4</p>
                   <p className="font-mono text-[10px] md:text-xs text-white mt-1 uppercase tracking-widest">Team Size</p>
                 </div>
 
